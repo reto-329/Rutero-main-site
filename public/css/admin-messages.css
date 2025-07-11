@@ -116,7 +116,7 @@
     .message-container {
         top: 10px;
         right: 10px;
-        left: 10px;
+        left: 100px;
         max-width: calc(100vw - 20px);
     }
     
@@ -142,7 +142,7 @@
     .message-container {
         top: 5px;
         right: 5px;
-        left: 5px;
+        left: 150px;
         max-width: calc(100vw - 10px);
     }
     

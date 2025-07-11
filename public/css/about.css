@@ -1,3 +1,11 @@
+html, body {
+    overflow-x: hidden;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 /* ABOUT US PAGE STYLES */
 
 /* Hero Section */
@@ -377,7 +385,7 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     text-align: center;
     transition: transform 0.3s ease;
-    animation: float 6s ease-in-out infinite;
+    animation: float 10s ease-in-out infinite;
 }
 
 .floating-card:hover {
@@ -589,7 +597,7 @@
 
 @media (max-width: 480px) {
     .hero-section {
-        height: 400px;
+        height: 690px;
         background-attachment: scroll;
     }
     
@@ -616,6 +624,31 @@
         padding: 1rem;
         font-size: 0.8rem;
     }
+
+    .card-1 {
+        top: 60%;
+        left: 10%;
+        animation-delay: 0s;
+    }
+
+    .card-2 {
+        top: 10%;
+        right: 60%;
+        animation-delay: 1.5s;
+    }
+
+    .card-3 {
+        bottom: 55%;
+        left: 40%;
+        animation-delay: 3s;
+    }
+
+    .card-4 {
+        bottom: 20%;
+        right: 2%;
+        animation-delay: 4.5s;
+    }
+
     
     .card-icon {
         font-size: 1.5rem;

@@ -34,28 +34,28 @@
 
             <div class="admin-card">
                 <% if (proprietor) { %>
-                    <div style="display: flex; gap: 2rem; align-items: flex-start;">
+                    <div class="proprietor-display">
                         <% if (proprietor.image) { %>
-                            <div style="flex-shrink: 0;">
-                                <img src="<%= proprietor.image %>" alt="Proprietor" style="width: 150px; height: 150px; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow);">
+                            <div class="proprietor-image">
+                                <img src="<%= proprietor.image %>" alt="Proprietor">
                             </div>
                         <% } %>
-                        <div style="flex: 1;">
-                            <h2 style="margin: 0 0 0.5rem 0; color: var(--text);"><%= proprietor.title %></h2>
-                            <div style="color: var(--text-light); margin-bottom: 1.5rem; font-size: 0.875rem;">
+                        <div class="proprietor-text">
+                            <h3><%= proprietor.title %></h3>
+                            <div class="proprietor-meta">
                                 By <%= proprietor.author %> • <%= proprietor.date ? new Date(proprietor.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '' %>
                             </div>
-                            <p style="line-height: 1.7; color: var(--text); margin: 0;"><%= proprietor.content %></p>
+                            <p><%= proprietor.content %></p>
                         </div>
                     </div>
                 <% } else { %>
-                    <div style="text-align: center; padding: 3rem;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-light); margin-bottom: 1rem;">
+                    <div class="empty-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
-                        <h3 style="color: var(--text); margin-bottom: 0.5rem;">No proprietor message set</h3>
-                        <p style="color: var(--text-light);">Click "Edit Message" to add the proprietor's message</p>
+                        <h3>No proprietor message set</h3>
+                        <p>Click "Edit Message" to add the proprietor's message</p>
                     </div>
                 <% } %>
             </div>
@@ -102,11 +102,13 @@
     </div>
 
     <script>
-
-
         function openModal() {
             document.getElementById('editModal').classList.add('show');
             document.body.style.overflow = 'hidden';
+            // Set current date if empty
+            if (!document.getElementById('date').value) {
+                document.getElementById('date').valueAsDate = new Date();
+            }
         }
 
         function closeModal() {
@@ -119,8 +121,6 @@
                 closeModal();
             }
         }
-        
-
     </script>
     <script src="/js/admin-sidebar.js"></script>
     <script src="/js/admin-messages.js"></script>

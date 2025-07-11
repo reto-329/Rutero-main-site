@@ -1317,7 +1317,7 @@ body {
     
     .hero-section {
         min-height: 70vh;
-        padding: 1rem 0;
+        padding: 85px 0 1rem; /* Adjusted for fixed header */
     }
     
     .hero-content {

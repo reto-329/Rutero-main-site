@@ -1,4 +1,11 @@
 /* GALLERY PAGE STYLES */
+html, body {
+    overflow-x: hidden;
+}
+
+* {
+    box-sizing: border-box;
+}
 
 /* Hero Section */
 .hero-section {
@@ -592,7 +599,7 @@
 
 @media (max-width: 768px) {
     .hero-section {
-        height: 300px;
+        height: 350px;
         background-attachment: scroll;
     }
     
@@ -667,11 +674,11 @@
     }
     
     .modal-prev {
-        left: -60px;
+        left: 15px;
     }
     
     .modal-next {
-        right: -60px;
+        right: 15px;
     }
     
     .modal-footer {
@@ -685,6 +692,12 @@
 }
 
 @media (max-width: 480px) {
+
+    .hero-section {
+        height: 330px;
+        background-attachment: scroll;
+    }
+
     .gallery {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
@@ -724,16 +737,9 @@
     }
     
     .modal {
+        position: fixed;
         padding: 0.25rem;
-    }
-    
-    .modal-content img {
-        max-height: 75vh;
-        border-radius: 6px;
-    }
-    
-    .modal {
-        position: relative;
+        background-color: rgba(0,0,0,0.8);
     }
     
     .modal-nav {

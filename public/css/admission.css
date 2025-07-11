@@ -1,3 +1,11 @@
+html, body {
+    overflow-x: hidden;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 /* ADMISSION PAGE STYLES */
 
 /* Hero Section */
@@ -916,7 +924,7 @@
 
 @media (max-width: 480px) {
     .hero-section {
-        height: 400px;
+        height: 570px;
         background-attachment: scroll;
     }
     
@@ -926,6 +934,13 @@
     
     .hero-content p {
         font-size: 1.1rem;
+    }
+
+    .exam-content h2 {
+        font-size: 2.1rem;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        font-weight: 600;
     }
     
     .admission-overview,
