@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>::HOME PAGE::</title>
+    <link rel="icon" href="Images/image.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+</head>
+<body>
+    <%- include("partials/header") %>
+
+    <section class="hero-slideshow">
+        <div class="slide active">
+            <div class="slide-bg slide-bg-1"></div>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <h1 class="hero-title">Welcome To Rutero Model School</h1>
+                <p class="hero-subtitle">A non-profit-making, comprehensive and co-educational school established to break new grounds in the area of facilitating and actualising the potential of its students</p>
+                <div class="hero-buttons">
+                    <a href="/contact" class="btn-primary">Contact Us</a>
+                    <a href="/about" class="btn-secondary">Learn More</a>
+                </div>
+            </div>
+        </div>
+        <div class="slide">
+            <div class="slide-bg slide-bg-2"></div>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <h1 class="hero-title">Excellence in Education</h1>
+                <p class="hero-subtitle">Nurturing future leaders through comprehensive education, moral development, and character building in a conducive learning environment</p>
+                <div class="hero-buttons">
+                    <a href="/admission" class="btn-primary">Apply Now</a>
+                    <a href="/gallery" class="btn-secondary">View Gallery</a>
+                </div>
+            </div>
+        </div>
+        <div class="slide">
+            <div class="slide-bg slide-bg-3"></div>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <h1 class="hero-title">Shaping Tomorrow's Leaders</h1>
+                <p class="hero-subtitle">Empowering students with world-class facilities, dedicated educators, and a holistic approach to learning and development</p>
+                <div class="hero-buttons">
+                    <a href="/about" class="btn-primary">Our Story</a>
+                    <a href="/contact" class="btn-secondary">Get in Touch</a>
+                </div>
+            </div>
+        </div>
+        
+        <button class="slide-nav prev" onclick="changeSlide(-1)" aria-label="Previous slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15,18 9,12 15,6"></polyline>
+            </svg>
+        </button>
+        <button class="slide-nav next" onclick="changeSlide(1)" aria-label="Next slide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9,18 15,12 9,6"></polyline>
+            </svg>
+        </button>
+        
+        <div class="slide-indicators">
+            <button class="indicator active" onclick="goToSlide(0)"></button>
+            <button class="indicator" onclick="goToSlide(1)"></button>
+            <button class="indicator" onclick="goToSlide(2)"></button>
+        </div>
+    </section>
+
+    <div class="announcement-banner">
+        <div class="banner-content">
+            <span class="banner-icon">📢</span>
+            <div class="banner-text">
+                <strong>Welcome to Rutero Model School!</strong> - Admissions now open for 2024/2025 academic session
+            </div>
+        </div>
+    </div>
+
+    <section class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Choose Rutero Model School?</h2>
+                <p>Discover what makes us the preferred choice for quality education</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Admissions</h3>
+                        <p>RUTERO gives admission to brilliant and intelligent young boys and girls every year, fostering academic excellence and character development.</p>
+                        <a href="/admission" class="feature-link">Learn More →</a>
+                    </div>
+                </div>
+
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>School Programmes</h3>
+                        <p>RUTERO offers your child a great deal of opportunities to explore all possibilities in life through comprehensive educational programs.</p>
+                        <a href="/about" class="feature-link">Explore →</a>
+                    </div>
+                </div>
+
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>School Events</h3>
+                        <p>Be in the know. Have a look at our well-planned timetable and exciting events for the 2024/2025 academic session.</p>
+                        <a href="#quick-announcements" class="feature-link">View Calendar →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="news-section">
+        <div class="container">
+            <div class="news-grid">
+                <div class="news-column">
+                    <div class="section-title">
+                        <div class="title-icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <h2>Latest News</h2>
+                    </div>
+                    
+                    <% if (latestNews && latestNews.length > 0) { %>
+                        <% latestNews.forEach(function(news, index) { %>
+                            <article class="news-article" data-aos="fade-up" data-aos-delay="<%= index * 100 %>">
+                                <h3><%= news.title %></h3>
+                                <div class="article-meta">
+                                    <span>by <%= news.author %></span> • <span><%= news.date ? new Date(news.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'No date' %></span> • <span><%= news.category %></span>
+                                </div>
+                                <p><%= news.content.substring(0, 150) %>...</p>
+                                <a href="javascript:void(0)" class="read-more" onclick="openNewsPopup(<%= index %>)">Read More →</a>
+                            </article>
+                        <% }) %>
+                    <% } else { %>
+                        <article class="news-article" data-aos="fade-up">
+                            <h3>No News Available</h3>
+                            <div class="article-meta">
+                                <span>by ADMIN</span> • <span>Today</span> • <span>General</span>
+                            </div>
+                            <p>No news articles have been published yet. Please check back later for updates.</p>
+                        </article>
+                    <% } %>
+                    
+                    <div class="view-more-section">
+                        <a href="/news" class="view-more-btn-home view-more-news">View More News</a>
+                    </div>
+                </div>
+
+                <div class="announcements-column">
+                    <div class="section-title">
+                        <div class="title-icon">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <h2>Announcements</h2>
+                    </div>
+                    
+                    <% if (proprietor) { %>
+                        <div class="featured-announcement" data-aos="fade-up">
+                            <div class="announcement-image">
+                                <img src="<%= proprietor.image %>" alt="Proprietor Message">
+                            </div>
+                            <div class="announcement-content">
+                                <h3><%= proprietor.title %></h3>
+                                <div class="article-meta">
+                                    <span>by <%= proprietor.author %></span> • <span><%= proprietor.date ? new Date(proprietor.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '' %></span>
+                                </div>
+                                <p><%= proprietor.content.substring(0, 150) %>...</p>
+                                <a href="javascript:void(0)" class="read-more" onclick="openProprietorModal()">Read Full Message →</a>
+                            </div>
+                        </div>
+                    <% } else { %>
+                        <div class="featured-announcement" data-aos="fade-up">
+                            <div class="announcement-image">
+                                <img src="Images/PHOTO-2024-05-01-10-27-35.jpg" alt="Proprietor Message">
+                            </div>
+                            <div class="announcement-content">
+                                <h3>Welcome to Excellence in Education</h3>
+                                <div class="article-meta">
+                                    <span>by Proprietor</span> • <span>January 15, 2025</span>
+                                </div>
+                                <p>At Rutero Model School, we are committed to providing world-class education that nurtures young minds and prepares them for future success. Our dedication to academic excellence remains unwavering.</p>
+                                <a href="#" class="read-more">Read Full Message →</a>
+                            </div>
+                        </div>
+                    <% } %>
+
+                    <div class="quick-announcements" id="quick-announcements">
+                        <% if (latestAnnouncements && latestAnnouncements.length > 0) { %>
+                            <% latestAnnouncements.forEach(function(announcement) { %>
+                                <div class="quick-announcement">
+                                    <div class="announcement-date">
+                                        <span class="day"><%= new Date(announcement.date).getDate() %></span>
+                                        <span class="month"><%= new Date(announcement.date).toLocaleDateString('en-US', { month: 'short' }) %></span>
+                                    </div>
+                                    <div class="announcement-text">
+                                        <h4><%= announcement.title %></h4>
+                                        <p><%= announcement.description %></p>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <div class="quick-announcement">
+                                <div class="announcement-date">
+                                    <span class="day">--</span>
+                                    <span class="month">---</span>
+                                </div>
+                                <div class="announcement-text">
+                                    <h4>No Announcements</h4>
+                                    <p>No announcements available at this time</p>
+                                </div>
+                            </div>
+                        <% } %>
+                    </div>
+                    
+                    <div class="view-more-section">
+                        <a href="/announcements" class="view-more-btn-home view-more-announcements">View More Announcements</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Modal -->
+    <div id="newsModal" class="modal">
+        <div class="modal-content">
+            <button onclick="closeNewsPopup()" class="modal-close">&times;</button>
+            <h1 id="modalTitle" class="modal-title"></h1>
+            <div id="modalMeta" class="modal-meta"></div>
+            <div id="modalContent" class="modal-content-text"></div>
+        </div>
+    </div>
+
+    <!-- Proprietor Modal -->
+    <% if (proprietor) { %>
+    <div id="proprietorModal" class="modal">
+        <div class="modal-content">
+            <button onclick="closeProprietorModal()" class="modal-close">&times;</button>
+            <h1 class="modal-title"><%- proprietor.title %></h1>
+            <div class="modal-meta">by <%- proprietor.author %> | <%- proprietor.date ? new Date(proprietor.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '' %></div>
+            <div class="modal-content-text"><%- proprietor.content.replace(/\n/g, '<br><br>') %></div>
+        </div>
+    </div>
+    <% } %>
+    
+    <script>
+        const newsData = <%-JSON.stringify(latestNews || []) %>;
+        
+        function openNewsPopup(index) {
+            const news = newsData[index];
+            document.getElementById('modalTitle').textContent = news.title;
+            document.getElementById('modalMeta').innerHTML = '<strong>Author:</strong> ' + news.author + ' | <strong>Date:</strong> ' + new Date(news.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) + ' | <strong>Category:</strong> ' + news.category;
+            document.getElementById('modalContent').innerHTML = news.content.replace(/\n/g, '<br><br>');
+            document.getElementById('newsModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeNewsPopup() {
+            document.getElementById('newsModal').style.display = 'none';
+            document.body.style.overflow = '';
+        }
+        
+        function openProprietorModal() {
+            <% if (proprietor) { %>
+                document.getElementById('proprietorModal').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            <% } %>
+        }
+        
+        function closeProprietorModal() {
+            <% if (proprietor) { %>
+                document.getElementById('proprietorModal').style.display = 'none';
+                document.body.style.overflow = '';
+            <% } %>
+        }
+        
+        window.onclick = function(event) {
+            if (event.target.id === 'newsModal') {
+                closeNewsPopup();
+            }
+            <% if (proprietor) { %>
+                if (event.target.id === 'proprietorModal') {
+                    closeProprietorModal();
+                }
+            <% } %>
+        }
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const indicators = document.querySelectorAll('.indicator');
+        
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            indicators.forEach((indicator, i) => {
+                indicator.classList.toggle('active', i === index);
+            });
+        }
+        
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide >= slides.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = slides.length - 1;
+            showSlide(currentSlide);
+        }
+        
+        function goToSlide(index) {
+            currentSlide = index;
+            showSlide(currentSlide);
+        }
+        
+        // Auto-advance slides
+        setInterval(() => {
+            changeSlide(1);
+        }, 6000);
+
+        // Simple AOS-like animation on scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('[data-aos]');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('aos-animate');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', animateOnScroll);
+        document.addEventListener('DOMContentLoaded', animateOnScroll);
+
+        // Sidebar toggle logic
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebarNav = document.getElementById('sidebarNav');
+        const closeSidebar = document.getElementById('closeSidebar');
+        hamburgerBtn.addEventListener('click', function() {
+            sidebarNav.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        });
+        closeSidebar.addEventListener('click', function() {
+            sidebarNav.classList.remove('open');
+            document.body.style.overflow = '';
+        });
+        window.addEventListener('click', function(e) {
+            if (e.target === sidebarNav) {
+                sidebarNav.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+
+    <%- include("partials/footer") %>
+</body>
+</html>

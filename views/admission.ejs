@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>::ADMISSION PAGE::</title>
+    <link rel="icon" href="Images/image.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admission.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+</head>
+<body>
+    <%- include("partials/header") %>
+
+    <section class="hero-section">
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h1>Join Rutero Model School</h1>
+                <p>Begin your child's journey to academic excellence and character development</p>
+                <div class="hero-buttons">
+                    <a href="#application" class="btn-primary">Apply Now</a>
+                    <a href="#process" class="btn-secondary">Learn Process</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="admission-overview">
+        <div class="container">
+            <div class="section-header">
+                <h2>Admission Overview</h2>
+                <p>We welcome brilliant and intelligent young minds to join our academic community</p>
+            </div>
+            
+            <div class="overview-grid">
+                <div class="overview-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                        </svg>
+                    </div>
+                    <h3>Academic Excellence</h3>
+                    <p>We seek students who demonstrate academic potential and a genuine desire to learn and grow in our nurturing environment.</p>
+                </div>
+
+                <div class="overview-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3>Character Development</h3>
+                    <p>Beyond academics, we value students who show integrity, respect, and a willingness to contribute positively to our school community.</p>
+                </div>
+
+                <div class="overview-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12,6 12,12 16,14"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Rolling Admissions</h3>
+                    <p>We accept applications throughout the year, allowing families flexibility in planning their child's educational journey with us.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="admission-process" id="process">
+        <div class="container">
+            <div class="section-header">
+                <h2>Admission Process</h2>
+                <p>A simple, transparent process designed to help us get to know your child</p>
+            </div>
+            
+            <div class="process-timeline">
+                <div class="timeline-item" data-aos="fade-right" data-aos-delay="100">
+                    <div class="timeline-marker">
+                        <span class="step-number">1</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Submit Application</h3>
+                        <p>Complete our online application form with your child's information, academic records, and personal details. Include any supporting documents that showcase your child's achievements.</p>
+                        <ul class="requirements-list">
+                            <li>Completed application form</li>
+                            <li>Birth certificate copy</li>
+                            <li>Previous school records</li>
+                            <li>Passport photographs</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item" data-aos="fade-left" data-aos-delay="200">
+                    <div class="timeline-marker">
+                        <span class="step-number">2</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Entrance Assessment</h3>
+                        <p>Your child will participate in an age-appropriate assessment designed to understand their current academic level and learning style. This helps us provide the best educational support.</p>
+                        <div class="assessment-details">
+                            <div class="detail-item">
+                                <strong>Duration:</strong> 2-3 hours
+                            </div>
+                            <div class="detail-item">
+                                <strong>Subjects:</strong> Will be Communicated 
+                            </div>
+                            <div class="detail-item">
+                                <strong>Format:</strong> Written and oral components
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item" data-aos="fade-right" data-aos-delay="300">
+                    <div class="timeline-marker">
+                        <span class="step-number">3</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Parent Interview</h3>
+                        <p>We believe in partnership with parents. This informal meeting allows us to discuss your child's needs, our educational philosophy, and answer any questions you may have.</p>
+                        <div class="interview-topics">
+                            <span class="topic-tag">Educational Goals</span>
+                            <span class="topic-tag">School Values</span>
+                            <span class="topic-tag">Support Systems</span>
+                            <span class="topic-tag">Extracurricular Interests</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item" data-aos="fade-left" data-aos-delay="400">
+                    <div class="timeline-marker">
+                        <span class="step-number">4</span>
+                    </div>
+                    <div class="timeline-content">
+                        <h3>Admission Decision</h3>
+                        <p>Our admissions committee carefully reviews each application. We'll notify you of our decision within 5-7 business days and provide guidance for the next steps.</p>
+                        <div class="decision-timeline">
+                            <div class="timeline-point">
+                                <span class="point-day">Day 1-3</span>
+                                <span class="point-desc">Application Review</span>
+                            </div>
+                            <div class="timeline-point">
+                                <span class="point-day">Day 4-5</span>
+                                <span class="point-desc">Committee Decision</span>
+                            </div>
+                            <div class="timeline-point">
+                                <span class="point-day">Day 6-7</span>
+                                <span class="point-desc">Notification Sent</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="entrance-exam">
+        <div class="container">
+            <div class="exam-grid">
+                <div class="exam-content" data-aos="fade-right">
+                    <h2>Entrance Examination</h2>
+                    <p>Our entrance examination is designed to assess your child's readiness and help us understand how we can best support their learning journey.</p>
+                    
+                    <div class="exam-features">
+                        <div class="feature-item">
+                            <div class="feature-icon">📝</div>
+                            <div class="feature-text">
+                                <h4>Age-Appropriate Content</h4>
+                                <p>Tailored assessments for different grade levels</p>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <div class="feature-icon">🎯</div>
+                            <div class="feature-text">
+                                <h4>Comprehensive Evaluation</h4>
+                                <p>Academic skills, critical thinking, and creativity</p>
+                            </div>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <div class="feature-icon">🤝</div>
+                            <div class="feature-text">
+                                <h4>Supportive Environment</h4>
+                                <p>Comfortable, stress-free testing atmosphere</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="exam-schedule">
+                        <h4>Examination Schedule</h4>
+                        <div class="schedule-grid">
+                            <div class="schedule-item">
+                                <span class="schedule-day">Monday - Friday</span>
+                                <span class="schedule-time">9:00 AM - 12:00 PM</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="exam-visual" data-aos="fade-left">
+                    <div class="exam-card">
+                        <div class="card-header">
+                            <h3>Exam Components</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="component-item">
+                                <div class="component-icon">📚</div>
+                                <div class="component-details">
+                                    <h5>English Language</h5>
+                                    <p>Reading comprehension, vocabulary, and basic grammar</p>
+                                    <span class="duration">30 minutes</span>
+                                </div>
+                            </div>
+                            
+                            <div class="component-item">
+                                <div class="component-icon">🔢</div>
+                                <div class="component-details">
+                                    <h5>Mathematics</h5>
+                                    <p>Numerical skills, problem-solving, and logical reasoning</p>
+                                    <span class="duration">30 minutes</span>
+                                </div>
+                            </div>
+                            
+                            <div class="component-item">
+                                <div class="component-icon">🌍</div>
+                                <div class="component-details">
+                                    <h5>General Knowledge</h5>
+                                    <p>Current affairs, basic science, and social awareness</p>
+                                    <span class="duration">20 minutes</span>
+                                </div>
+                            </div>
+                            
+                            <div class="component-item">
+                                <div class="component-icon">💭</div>
+                                <div class="component-details">
+                                    <h5>Creative Expression</h5>
+                                    <p>Drawing, storytelling, or creative writing</p>
+                                    <span class="duration">20 minutes</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="application-form" id="application">
+        <div class="container">
+            <div class="section-header">
+                <h2>Online Application</h2>
+                <p>Start your child's journey with us by completing our application form</p>
+            </div>
+            
+            <div class="form-container" data-aos="fade-up">
+                <form id="admissionForm" class="admission-form">
+                    <div class="form-section">
+                        <h3>Student Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                                <div class="error-message"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                                <div class="error-message"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="dateOfBirth">Date of Birth *</label>
+                                <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                                <div class="error-message"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">Gender *</label>
+                                <select id="gender" name="gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                                <div class="error-message"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="gradeApplying">Grade Applying For *</label>
+                            <select id="gradeApplying" name="gradeApplying" required>
+                                <option value="">Select Grade</option>
+                                <option value="nursery1">Nursery 1</option>
+                                <option value="nursery2">Nursery 2</option>
+                                <option value="kg1">KG 1</option>
+                                <option value="kg2">KG 2</option>
+                                <option value="primary1">Primary 1</option>
+                                <option value="primary2">Primary 2</option>
+                                <option value="primary3">Primary 3</option>
+                                <option value="primary4">Primary 4</option>
+                                <option value="primary5">Primary 5</option>
+                                <option value="primary6">Primary 6</option>
+                                <option value="jss1">JSS 1</option>
+                                <option value="jss2">JSS 2</option>
+                                <option value="jss3">JSS 3</option>
+                                <option value="ss1">SS 1</option>
+                                <option value="ss2">SS 2</option>
+                            </select>
+                            <div class="error-message"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Parent/Guardian Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="parentName">Parent/Guardian Name *</label>
+                                <input type="text" id="parentName" name="parentName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="relationship">Relationship *</label>
+                                <select id="relationship" name="relationship" required>
+                                    <option value="">Select Relationship</option>
+                                    <option value="father">Father</option>
+                                    <option value="mother">Mother</option>
+                                    <option value="guardian">Guardian</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="parentEmail">Email Address *</label>
+                                <input type="email" id="parentEmail" name="parentEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="parentPhone">Phone Number *</label>
+                                <input type="tel" id="parentPhone" name="parentPhone" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="address">Home Address *</label>
+                            <textarea id="address" name="address" rows="3" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Previous School Information</h3>
+                        <div class="form-group">
+                            <label for="previousSchool">Previous School Name</label>
+                            <input type="text" id="previousSchool" name="previousSchool">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="lastGrade">Last Grade Completed</label>
+                                <input type="text" id="lastGrade" name="lastGrade">
+                            </div>
+                            <div class="form-group">
+                                <label for="yearCompleted">Year Completed</label>
+                                <input type="number" id="yearCompleted" name="yearCompleted" min="2015" max="2024">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Additional Information</h3>
+                        <div class="form-group">
+                            <label for="specialNeeds">Special Educational Needs or Medical Conditions</label>
+                            <textarea id="specialNeeds" name="specialNeeds" rows="3" placeholder="Please describe any special needs, medical conditions, or accommodations required"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="interests">Student's Interests and Hobbies</label>
+                            <textarea id="interests" name="interests" rows="3" placeholder="Tell us about your child's interests, hobbies, and extracurricular activities"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="whyRutero">Why do you want your child to attend Rutero Model School?</label>
+                            <textarea id="whyRutero" name="whyRutero" rows="4" placeholder="Share your reasons for choosing our school"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn">
+                            <span class="btn-text">Submit Application</span>
+                            <span class="btn-loading">Submitting...</span>
+                        </button>
+                        <p class="form-note">* Required fields. We'll contact you within 2-3 business days to schedule the entrance assessment.</p>
+                    </div>
+                </form>
+
+                <div id="application-success" class="success-message">
+                    <div class="success-icon">✓</div>
+                    <h3>Application Submitted Successfully!</h3>
+                    <p>Thank you for your interest in Rutero Model School. We have received your application and will contact you within 2-3 business days to schedule the entrance assessment.</p>
+                    <div class="next-steps">
+                        <h4>What's Next?</h4>
+                        <ul>
+                            <li>We'll review your application</li>
+                            <li>Schedule entrance assessment</li>
+                            <li>Arrange parent interview</li>
+                            <li>Provide admission decision</li>
+                        </ul>
+                    </div>
+                    <button onclick="resetApplicationForm()" class="reset-btn">Submit Another Application</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <%- include("partials/footer") %>
+
+    <script src="js/admission.js"></script>
+    <script>
+        // Sidebar toggle logic
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebarNav = document.getElementById('sidebarNav');
+        const closeSidebar = document.getElementById('closeSidebar');
+        hamburgerBtn.addEventListener('click', function() {
+            sidebarNav.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        });
+        closeSidebar.addEventListener('click', function() {
+            sidebarNav.classList.remove('open');
+            document.body.style.overflow = '';
+        });
+        window.addEventListener('click', function(e) {
+            if (e.target === sidebarNav) {
+                sidebarNav.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+</body>
+</html>

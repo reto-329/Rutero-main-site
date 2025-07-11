@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Rutero Model School</title>
+    <link rel="stylesheet" href="css/logingate.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="Images/image.png" type="image/png">
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="floating-elements">
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+        </div>
+    </div>
+
+    <!-- Header with Logo -->
+    <header class="login-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="Images/image.png" alt="Rutero Model School Logo" class="header-logo">
+                <div class="school-info">
+                    <h1 class="school-name">Rutero Model School</h1>
+                    <p class="school-tagline">Excellence in Education</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="login-main">
+        <div class="login-container">
+            <!-- Welcome Section -->
+            <div class="welcome-section">
+                <div class="welcome-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h2 class="welcome-title">Welcome Back</h2>
+                <p class="welcome-subtitle">Please select your login type to continue</p>
+            </div>
+
+            <!-- Login Options -->
+            <div class="login-options">
+                <a href="/admin/login" class="login-option admin-login" data-type="admin">
+                    <div class="option-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div class="option-content">
+                        <h3 class="option-title">Admin Login</h3>
+                        <p class="option-description">Access administrative dashboard and school management tools</p>
+                    </div>
+                    <div class="option-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+
+                <a href="https://edufyschool.com/auth/parent/login" class="login-option parent-login" data-type="parent">
+                    <div class="option-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <div class="option-content">
+                        <h3 class="option-title">Parent Login</h3>
+                        <p class="option-description">View your child's progress, attendance, and school updates</p>
+                    </div>
+                    <div class="option-arrow">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Additional Options -->
+            <div class="additional-options">
+                <div class="divider">
+                    <span class="divider-text">Need Help?</span>
+                </div>
+                
+                <div class="help-links">
+                    <a href="/contact" class="help-link">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Contact Support</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Back to Home -->
+            <div class="back-section">
+                <a href="/" class="back-home-link">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Home</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="login-footer">
+        <p>&copy; 2024 Rutero Model School. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Add loading animation and interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate elements on load
+            const container = document.querySelector('.login-container');
+            const options = document.querySelectorAll('.login-option');
+            
+            // Add loaded class for animations
+            setTimeout(() => {
+                container.classList.add('loaded');
+            }, 100);
+
+            // Add hover effects and click animations
+            options.forEach(option => {
+                option.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px) scale(1.02)';
+                });
+
+                option.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+
+                option.addEventListener('click', function(e) {
+                    // Add click animation
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-5px) scale(1.02)';
+                    }, 150);
+                });
+            });
+
+            // Floating elements animation
+            const floatingElements = document.querySelectorAll('.floating-element');
+            floatingElements.forEach((element, index) => {
+                element.style.animationDelay = `${index * 2}s`;
+            });
+        });
+
+        // Sidebar toggle logic
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebarNav = document.getElementById('sidebarNav');
+        const closeSidebar = document.getElementById('closeSidebar');
+        hamburgerBtn.addEventListener('click', function() {
+            sidebarNav.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        });
+        closeSidebar.addEventListener('click', function() {
+            sidebarNav.classList.remove('open');
+            document.body.style.overflow = '';
+        });
+        window.addEventListener('click', function(e) {
+            if (e.target === sidebarNav) {
+                sidebarNav.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery Management</title>
+    <link rel="icon" href="/Images/image.png" type="image/png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/admin-layout.css">
+    <link rel="stylesheet" href="/css/admin-gallery.css">
+    <link rel="stylesheet" href="/css/admin-messages.css">
+    <link rel="stylesheet" href="/css/admin-confirm.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <%- include('partials/sidebar', { activePage: 'gallery', username: adminUsername || 'Admin' }) %>
+        <main class="admin-main">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title"><i class="fas fa-images"></i> Gallery Management</h1>
+                    <p class="page-subtitle">Manage photo albums and images</p>
+                </div>
+                <button class="btn btn-primary" onclick="openAddModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21,15 16,10 5,21"></polyline>
+                    </svg>
+                    Add Album
+                </button>
+            </div>
+
+        <!-- Add Gallery Modal -->
+        <div id="addGalleryModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add New Album</h2>
+                    <button type="button" class="modal-close-btn" onclick="closeAddModal()">&times;</button>
+                </div>
+                <form action="/admin/gallery/add-album" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="title">Album Title</label>
+                        <input type="text" id="title" name="title" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description (Optional)</label>
+                        <textarea id="description" name="description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="images">Upload Images (Max 20)</label>
+                        <input type="file" id="images" name="images" class="form-control" multiple accept="image/*" required onchange="validateFileCount(this)">
+                        <small>You can select up to 20 images at once</small>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-danger" onclick="closeAddModal()">Cancel</button>
+                        <button type="submit" class="btn btn-success">Create Album</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+        <!-- Add Images Modal -->
+        <div id="addImagesModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add Images to Album</h2>
+                    <button type="button" class="modal-close-btn" onclick="closeAddImagesModal()">&times;</button>
+                </div>
+                <form id="addImagesForm" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="newImages">Upload Images (Max 20)</label>
+                        <input type="file" id="newImages" name="images" class="form-control" multiple accept="image/*" required onchange="validateFileCount(this)">
+                        <small>You can select up to 20 images at once</small>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-danger" onclick="closeAddImagesModal()">Cancel</button>
+                        <button type="submit" class="btn btn-success">Add Images</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+            <div class="admin-card">
+                <div class="card-header">
+                    <h2 class="card-title">Photo Albums</h2>
+                </div>
+                <div class="gallery-grid">
+            <% if (albums && albums.length > 0) { %>
+                <% albums.forEach((album, idx) => { %>
+                    <div class="gallery-item" onclick="viewGallery('<%= album._id %>')" style="cursor: pointer;">
+                        <div class="gallery-preview">
+                            <% if (album.images && album.images.length > 0) { %>
+                                <img src="<%= album.images[0].path %>" alt="<%= album.title %>">
+                                <div class="image-count"><%= album.images.length %> images</div>
+                            <% } %>
+                        </div>
+                        <div class="gallery-info">
+                            <h4><%= album.title %></h4>
+                            <% if (album.description) { %>
+                                <p class="description"><%= album.description %></p>
+                            <% } %>
+                            <div class="gallery-actions" onclick="event.stopPropagation();">
+                                <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); addImages('<%= album._id %>')" title="Add Images">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    </svg>
+                                </button>
+
+                                <button class="btn btn-danger btn-sm" onclick="deleteAlbum('<%= album._id %>', '<%= album.title %>')" title="Delete Album">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="3,6 5,6 21,6"></polyline>
+                                        <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <div class="empty-state">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <h3>No albums available</h3>
+                    <p>Add your first album by clicking the Add Album button above</p>
+                </div>
+            <% } %>
+                </div>
+            </div>
+
+        <!-- View Gallery Modal -->
+        <div id="viewGalleryModal" class="modal">
+            <div class="modal-content modal-large">
+                <div class="modal-header">
+                    <h2 id="viewTitle">Album Title</h2>
+                    <button type="button" class="modal-close-btn" onclick="closeViewModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="viewDescription" class="description-display"></div>
+                    <div id="viewImages" class="images-grid"></div>
+                </div>
+            </div>
+        </div>
+
+
+        </main>
+    </div>
+
+    <script>
+        const albumData = <%- JSON.stringify(albums || []) %>;
+        console.log('Album data loaded:', albumData);
+
+        function validateFileCount(input) {
+            if (input.files.length > 20) {
+                alert('You can only select up to 20 images at once. Please select fewer images.');
+                input.value = '';
+                return false;
+            }
+        }
+
+        function openAddModal() {
+            closeSidebar();
+            document.getElementById('addGalleryModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAddModal() {
+            document.getElementById('addGalleryModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+
+
+        function viewGallery(albumId) {
+            const album = albumData.find(a => a._id === albumId);
+            if (!album) {
+                console.error('Album not found:', albumId);
+                return;
+            }
+            
+            document.getElementById('viewTitle').textContent = album.title;
+            document.getElementById('viewDescription').textContent = album.description || '';
+            document.getElementById('viewGalleryModal').dataset.albumId = albumId;
+            
+            const imagesHtml = album.images.map((img, imgIdx) => 
+                `<div class="image-item">
+                    <img src="${img.path}" alt="${album.title}" onclick="openImageModal('${img.path}')">
+                    <button class="delete-image-btn" onclick="deleteImage('${album._id}', '${img.filename}')" title="Delete Image">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3,6 5,6 21,6"></polyline>
+                            <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"></path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                        </svg>
+                    </button>
+                </div>`
+            ).join('');
+            
+            document.getElementById('viewImages').innerHTML = imagesHtml;
+            document.getElementById('viewGalleryModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeViewModal() {
+            document.getElementById('viewGalleryModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function deleteAlbum(albumId, albumTitle) {
+            confirmDelete(
+                'Delete Album',
+                `Are you sure you want to delete the album "${albumTitle}"?\n\nThis action cannot be undone.`,
+                function() {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = `/admin/gallery/delete-album/${albumId}`;
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            );
+        }
+
+
+        
+        function addImages(albumId) {
+            const album = albumData.find(a => a._id === albumId);
+            if (!album) {
+                console.error('Album not found:', albumId);
+                return;
+            }
+            
+            document.getElementById('addImagesForm').action = `/admin/gallery/add-images/${album._id}`;
+            document.getElementById('addImagesModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeAddImagesModal() {
+            document.getElementById('addImagesModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        
+
+        
+        function deleteImage(albumId, filename) {
+            // Check if confirmDelete function exists
+            if (typeof confirmDelete !== 'function') {
+                console.error('confirmDelete function not found');
+                // Fallback to native confirm
+                if (confirm('Are you sure you want to delete this image?\n\nThis action cannot be undone.')) {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = `/admin/gallery/delete-image/${albumId}/${filename}`;
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+                return;
+            }
+            
+            confirmDelete(
+                'Delete Image',
+                'Are you sure you want to delete this image?\n\nThis action cannot be undone.',
+                function() {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = `/admin/gallery/delete-image/${albumId}/${filename}`;
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            );
+        }
+
+        let currentImageIndex = 0;
+        let currentAlbumImages = [];
+
+        function openImageModal(imagePath) {
+            const albumId = document.getElementById('viewGalleryModal').dataset.albumId;
+            const album = albumData.find(a => a._id === albumId);
+            if (!album) {
+                console.error('Album not found for image modal:', albumId);
+                return;
+            }
+            currentAlbumImages = album.images;
+            currentImageIndex = currentAlbumImages.findIndex(img => img.path === imagePath);
+            
+            const modal = document.createElement('div');
+            modal.className = 'image-modal';
+            modal.innerHTML = `
+                <div class="image-modal-content">
+                    <span class="image-modal-close" onclick="closeImageModal()">&times;</span>
+                    <button class="nav-btn prev-btn" onclick="prevImage()">&lt;</button>
+                    <img id="modalImage" src="${imagePath}" alt="Full size image">
+                    <button class="nav-btn next-btn" onclick="nextImage()">&gt;</button>
+                    <div class="image-counter">${currentImageIndex + 1} / ${currentAlbumImages.length}</div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeImageModal() {
+            const modal = document.querySelector('.image-modal');
+            if (modal) {
+                modal.remove();
+                document.body.style.overflow = '';
+            }
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % currentAlbumImages.length;
+            updateModalImage();
+        }
+
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + currentAlbumImages.length) % currentAlbumImages.length;
+            updateModalImage();
+        }
+
+        function updateModalImage() {
+            const img = document.getElementById('modalImage');
+            const counter = document.querySelector('.image-counter');
+            img.src = currentAlbumImages[currentImageIndex].path;
+            counter.textContent = `${currentImageIndex + 1} / ${currentAlbumImages.length}`;
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                if (event.target.id === 'addGalleryModal') {
+                    closeAddModal();
+                }
+
+                if (event.target.id === 'addImagesModal') {
+                    closeAddImagesModal();
+                }
+            }
+            if (event.target.classList.contains('image-modal')) {
+                closeImageModal();
+            }
+        }
+        
+
+        
+
+        
+        // Check if we need to reopen an album after page load
+        const urlParams = new URLSearchParams(window.location.search);
+        const reopenAlbumId = urlParams.get('reopenAlbum');
+        if (reopenAlbumId) {
+            setTimeout(() => viewGallery(reopenAlbumId), 500);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (document.querySelector('.image-modal')) {
+                if (e.key === 'ArrowRight') nextImage();
+                if (e.key === 'ArrowLeft') prevImage();
+                if (e.key === 'Escape') closeImageModal();
+            }
+        });
+    </script>
+    <style>
+        .image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+        .image-modal-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .image-modal-content img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        .image-modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            font-size: 20px;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.9);
+            color: black;
+            border-color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .prev-btn { left: -70px; }
+        .next-btn { right: -70px; }
+        @media (max-width: 768px) {
+            .image-modal-content {
+                max-width: 95vw;
+                max-height: 80vh;
+            }
+            .prev-btn { left: -60px; }
+            .next-btn { right: -60px; }
+            .nav-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+        }
+        .image-counter {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 14px;
+        }
+    </style>
+    <script src="/js/admin-sidebar.js"></script>
+    <script src="/js/admin-messages.js"></script>
+    <script src="/js/admin-confirm.js"></script>
+    <script src="/js/admin-loading.js"></script>
+</body>
+</html>

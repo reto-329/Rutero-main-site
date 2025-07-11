@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Announcements Management</title>
+    <link rel="icon" href="/Images/image.png" type="image/png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/admin-layout.css">
+    <link rel="stylesheet" href="/css/admin-news.css">
+    <link rel="stylesheet" href="/css/admin-messages.css">
+    <link rel="stylesheet" href="/css/admin-confirm.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <%- include('partials/sidebar', { activePage: 'announcements', username: adminUsername || 'Admin' }) %>
+        <main class="admin-main">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title"><i class="fas fa-bullhorn"></i> Announcements</h1>
+                    <p class="page-subtitle">Manage school announcements</p>
+                </div>
+                <button class="btn btn-primary" onclick="openAddModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add Announcement
+                </button>
+            </div>
+
+            <div class="admin-card">
+                <div class="card-header">
+                    <h2 class="card-title">School Announcements</h2>
+                </div>
+                
+                <div class="news-grid">
+                    <% if (announcements && announcements.length > 0) { %>
+                        <% announcements.forEach(function(announcement, idx) { %>
+                            <div class="news-item">
+                                <div>
+                                    <div class="news-title"><%= announcement.title %></div>
+                                    <div class="news-meta">
+                                        <span><%= announcement.date ? new Date(announcement.date).toLocaleDateString() : '' %></span>
+                                    </div>
+                                    <div class="news-content-preview">
+                                        <%= announcement.description.substring(0, 150) %>...
+                                    </div>
+                                </div>
+                                <div class="news-actions">
+                                    <button class="btn btn-primary btn-sm" onclick="viewAnnouncement('<%= idx %>')">Read More</button>
+                                    <button class="btn btn-primary btn-sm" onclick="openEditModal('<%= idx %>')">Edit</button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteAnnouncement('<%= announcement._id %>', '<%= announcement.title %>')">Delete</button>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <h3>No announcements available</h3>
+                            <p>Add your first announcement by clicking the Add Announcement button above</p>
+                        </div>
+                    <% } %>
+                </div>
+                
+                <!-- Pagination -->
+                <% if (typeof announcementPage !== 'undefined' && typeof totalAnnouncementPages !== 'undefined' && totalAnnouncementPages > 1) { %>
+                <div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                    <% if (announcementPage > 1) { %>
+                        <a href="?announcementPage=<%= announcementPage - 1 %>" class="btn btn-primary btn-sm">Previous</a>
+                    <% } %>
+                    <% for (let i = 1; i <= totalAnnouncementPages; i++) { %>
+                        <a href="?announcementPage=<%= i %>" class="btn btn-sm <%= i === announcementPage ? 'btn-success' : 'btn-primary' %>"><%= i %></a>
+                    <% } %>
+                    <% if (announcementPage < totalAnnouncementPages) { %>
+                        <a href="?announcementPage=<%= announcementPage + 1 %>" class="btn btn-primary btn-sm">Next</a>
+                    <% } %>
+                </div>
+                <% } %>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Announcement Modal -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Announcement</h2>
+                <button type="button" class="modal-close-btn" onclick="closeAddModal()">&times;</button>
+            </div>
+            <form action="/admin/announcements/add" method="POST">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" class="form-control" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" name="date" class="form-control" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-danger" onclick="closeAddModal()">Cancel</button>
+                    <button type="submit" class="btn btn-success">Add Announcement</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Announcement Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Announcement</h2>
+                <button type="button" class="modal-close-btn" onclick="closeEditModal()">&times;</button>
+            </div>
+            <form method="POST" action="/admin/announcements/edit">
+                <input type="hidden" id="edit-id" name="id">
+                <div class="form-group">
+                    <label for="edit-title">Title</label>
+                    <input type="text" id="edit-title" name="title" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-description">Description</label>
+                    <textarea id="edit-description" name="description" class="form-control" rows="4" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-date">Date</label>
+                    <input type="date" id="edit-date" name="date" class="form-control" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-danger" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Announcement Modal -->
+    <div id="viewAnnouncementModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="viewAnnouncementTitle">Announcement Title</h2>
+                <button type="button" class="modal-close-btn" onclick="closeViewAnnouncementModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="viewAnnouncementMeta" style="color: var(--text-light); margin-bottom: 1.5rem; font-size: 0.875rem;"></div>
+                <div id="viewAnnouncementContent" style="line-height: 1.7;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const announcementData = <%- JSON.stringify(announcements || []) %>;
+
+
+
+        function openAddModal() {
+            document.getElementById('addModal').classList.add('show');
+            document.getElementById('date').valueAsDate = new Date();
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function openEditModal(index) {
+            const announcement = announcementData[index];
+            if (!announcement) return;
+            document.getElementById('edit-id').value = announcement._id;
+            document.getElementById('edit-title').value = announcement.title;
+            document.getElementById('edit-description').value = announcement.description;
+            document.getElementById('edit-date').value = announcement.date ? new Date(announcement.date).toISOString().split('T')[0] : '';
+            document.getElementById('editModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function viewAnnouncement(index) {
+            const announcement = announcementData[index];
+            if (!announcement) return;
+            
+            document.getElementById('viewAnnouncementTitle').textContent = announcement.title;
+            document.getElementById('viewAnnouncementMeta').innerHTML = `${announcement.date ? new Date(announcement.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}`;
+            document.getElementById('viewAnnouncementContent').innerHTML = announcement.description.replace(/\n/g, '<br>');
+            document.getElementById('viewAnnouncementModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeViewAnnouncementModal() {
+            document.getElementById('viewAnnouncementModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function deleteAnnouncement(announcementId, announcementTitle) {
+            // Check if confirmDelete function exists
+            if (typeof confirmDelete !== 'function') {
+                console.error('confirmDelete function not found');
+                // Fallback to native confirm
+                if (confirm(`Are you sure you want to delete "${announcementTitle}"?\n\nThis action cannot be undone.`)) {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = `/admin/announcements/delete/${announcementId}`;
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+                return;
+            }
+            
+            confirmDelete(
+                'Delete Announcement',
+                `Are you sure you want to delete "${announcementTitle}"?\n\nThis action cannot be undone.`,
+                function() {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = `/admin/announcements/delete/${announcementId}`;
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            );
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                closeAddModal();
+                closeEditModal();
+                closeViewAnnouncementModal();
+            }
+        }
+        
+
+    </script>
+    <script src="/js/admin-sidebar.js"></script>
+    <script src="/js/admin-messages.js"></script>
+    <script src="/js/admin-confirm.js"></script>
+    <script src="/js/admin-loading.js"></script>
+</body>
+</html>

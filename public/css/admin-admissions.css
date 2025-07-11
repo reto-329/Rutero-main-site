@@ -1,0 +1,315 @@
+/* Admin Admissions - Enhanced Styles */
+:root {
+    --primary-color: #4a90e2;
+    --primary-hover: #357abd;
+    --text-color: #333;
+    --border-color: #e0e0e0;
+    --background-color: #f9fafb;
+    --white-color: #fff;
+    --shadow-color: rgba(0, 0, 0, 0.05);
+    --success-color: #065f46;
+    --warning-color: #92400e;
+    --danger-color: #991b1b;
+    --info-color: #4338ca;
+}
+
+.main-content header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.main-content h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0;
+}
+
+/* Search and filter controls */
+.controls-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.controls-container input,
+.controls-container select {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    min-width: 200px;
+    background-color: var(--white-color);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.controls-container input:focus,
+.controls-container select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+/* Admissions grid layout */
+.admissions-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.admission-card {
+    background-color: var(--white-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    padding: 1.5rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.admission-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.student-info h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-color);
+}
+
+.student-info p {
+    color: #666;
+    margin: 0.25rem 0 0;
+    font-size: 0.9rem;
+}
+
+.status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.status-submitted {
+    background-color: #e0e7ff;
+    color: var(--info-color);
+}
+
+.status-under-review {
+    background-color: #fef3c7;
+    color: var(--warning-color);
+}
+
+.status-accepted {
+    background-color: #d1fae5;
+    color: var(--success-color);
+}
+
+.status-rejected {
+    background-color: #fee2e2;
+    color: var(--danger-color);
+}
+
+.card-body {
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.info-item strong {
+    display: block;
+    color: #555;
+    margin-bottom: 0.25rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.info-item span {
+    font-size: 0.95rem;
+    word-break: break-word;
+}
+
+.info-item a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.info-item a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.application-date {
+    font-size: 0.875rem;
+    color: #777;
+}
+
+.btn-details {
+    background-color: var(--primary-color);
+    color: var(--white-color);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: background-color 0.2s;
+    display: inline-block;
+}
+
+.btn-details:hover {
+    background-color: var(--primary-hover);
+}
+
+.status-update-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.status-select {
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: var(--white-color);
+    font-size: 0.875rem;
+}
+
+.update-status-btn {
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    background-color: #6c757d;
+    color: white;
+    border: 1px solid #6c757d;
+}
+
+.update-status-btn:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.delete-icon {
+    color: var(--danger-color);
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: color 0.2s;
+}
+
+.delete-icon:hover {
+    color: #7f1d1d;
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    grid-column: 1 / -1;
+    color: #666;
+}
+
+.empty-state p {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Modal styles */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal-content {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    padding: 2rem 2.5rem;
+    max-width: 350px;
+    text-align: center;
+    animation: modalIn 0.2s;
+}
+@keyframes modalIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+.modal-content h2 {
+    margin-top: 0;
+    color: #d32f2f;
+    font-size: 1.3rem;
+}
+.modal-content p {
+    margin: 1rem 0 2rem 0;
+    color: #333;
+}
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+.btn.btn-danger {
+    background: #d32f2f;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 0.5rem 1.2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn.btn-danger:hover {
+    background: #b71c1c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .admissions-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .controls-container {
+        flex-direction: column;
+    }
+    
+    .controls-container input,
+    .controls-container select {
+        width: 100%;
+    }
+}

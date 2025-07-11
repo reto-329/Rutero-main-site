@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>::GALLERY PAGE::</title>
+    <link rel="icon" href="Images/image.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/gallery.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+</head>
+<body>
+    <%- include("partials/header") %>
+
+    <section class="hero-section"> 
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h1>Our Gallery</h1>
+                <p>Explore the vibrant life at Rutero Model School through our collection of memorable moments</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery-container">
+        <div class="gallery-header">
+            <h2><%= gallery ? gallery.title : 'School Gallery' %></h2>
+            <p><%= gallery ? gallery.description : 'Discover the essence of learning, growth, and community at our school' %></p>
+        </div>
+
+        <% if (selectedAlbum) { %>
+            <!-- Album Images View -->
+            <div class="album-view">
+                <div class="album-breadcrumb">
+                    <a href="/gallery" class="back-btn">← Back to Albums</a>
+                    <h3><%= selectedAlbum.title %></h3>
+                    <p><%= selectedAlbum.description %></p>
+                </div>
+                
+                <% if (selectedAlbum.images && selectedAlbum.images.length > 0) { %>
+                    <div class="gallery page active">
+                        <% selectedAlbum.images.forEach((image, index) => { %>
+                            <div class="gallery-item" onclick="openModal('<%= image.path %>', <%= index %>)">
+                                <img src="<%= image.thumbnail || image.path %>" alt="<%= selectedAlbum.title %> - Image <%= index + 1 %>" loading="lazy">
+                                <div class="gallery-overlay">
+                                    <span class="view-icon">👁</span>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="no-images">
+                        <p>No images in this album yet.</p>
+                    </div>
+                <% } %>
+                
+                <% if (totalPages > 1) { %>
+                    <div class="pagination">
+                        <% if (currentPage > 1) { %>
+                            <a href="/gallery?album=<%= albumId %>&page=<%= currentPage - 1 %>" class="page-btn">← Previous</a>
+                        <% } %>
+                        
+                        <% for (let i = 1; i <= totalPages; i++) { %>
+                            <a href="/gallery?album=<%= albumId %>&page=<%= i %>" class="page-btn <%= currentPage === i ? 'active' : '' %>"><%= i %></a>
+                        <% } %>
+                        
+                        <% if (currentPage < totalPages) { %>
+                            <a href="/gallery?album=<%= albumId %>&page=<%= currentPage + 1 %>" class="page-btn">Next →</a>
+                        <% } %>
+                    </div>
+                <% } %>
+            </div>
+        <% } else { %>
+            <!-- Albums Grid View -->
+            <% if (albums && albums.length > 0) { %>
+                <div class="albums-grid">
+                    <% albums.forEach((album) => { %>
+                        <div class="album-folder" onclick="window.location.href='/gallery?album=<%= album._id %>'">
+                            <div class="folder-icon">
+                                <div class="folder-back"></div>
+                                <div class="folder-front">
+                                    <% if (album.images && album.images.length > 0) { %>
+                                        <img src="<%= album.images[0].thumbnail || album.images[0].path %>" alt="<%= album.title %>" loading="lazy">
+                                    <% } %>
+                                </div>
+                            </div>
+                            <div class="album-info">
+                                <h3><%= album.title %></h3>
+                                <p><%= album.images ? album.images.length : 0 %> photos</p>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <div class="no-albums">
+                    <p>No albums available at the moment. Please check back later!</p>
+                </div>
+            <% } %>
+        <% } %>
+
+        <div id="myModal" class="modal">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div></div>
+                    <button class="modal-close" onclick="closeModal()" aria-label="Close modal">&times;</button>
+                </div>
+                <img id="modalImage" alt="Gallery Image">
+                <button class="modal-nav modal-prev" onclick="plusSlides(-1)" aria-label="Previous image">&#10094;</button>
+                <button class="modal-nav modal-next" onclick="plusSlides(1)" aria-label="Next image">&#10095;</button>
+                <div class="modal-footer">
+                    <div class="modal-counter">
+                        <span id="imageCounter">1 / <%= selectedAlbum && selectedAlbum.images ? selectedAlbum.images.length : 0 %></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+
+    </section>
+
+    <%- include("partials/footer") %>
+    <script src="js/gallery.js"></script>
+    <script>
+        // Sidebar toggle logic
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const sidebarNav = document.getElementById('sidebarNav');
+        const closeSidebar = document.getElementById('closeSidebar');
+        hamburgerBtn.addEventListener('click', function() {
+            sidebarNav.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        });
+        closeSidebar.addEventListener('click', function() {
+            sidebarNav.classList.remove('open');
+            document.body.style.overflow = '';
+        });
+        window.addEventListener('click', function(e) {
+            if (e.target === sidebarNav) {
+                sidebarNav.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+</body>
+</html>

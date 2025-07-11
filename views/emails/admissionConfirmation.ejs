@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #4682B4; color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; background-color: #f9f9f9; }
+        .footer { margin-top: 20px; padding: 10px; text-align: center; font-size: 0.8em; color: #777; }
+        .details { background-color: white; padding: 15px; margin: 15px 0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Rutero Model School</h1>
+            <h2>Application Received</h2>
+        </div>
+        
+        <div class="content">
+            <p>Dear <%= parentName %>,</p>
+            
+            <p>Thank you for submitting an application for <strong><%= firstName %> <%= lastName %></strong> 
+            to join Rutero Model School. We're excited to review your application!</p>
+            
+            <div class="details">
+                <h3>Application Summary</h3>
+                <p><strong>Student Name:</strong> <%= firstName %> <%= lastName %></p>
+                <p><strong>Grade Applying For:</strong> <%= gradeApplying %></p>
+                <p><strong>Application Date:</strong> <%= applicationDate.toLocaleDateString() %></p>
+            </div>
+            
+            <h3>Next Steps</h3>
+            <ol>
+                <li>Our admissions team will review your application</li>
+                <li>We'll contact you to schedule an entrance assessment</li>
+                <li>Arrange a parent interview (if required)</li>
+                <li>Provide an admission decision</li>
+            </ol>
+            
+            <p>This process typically takes 5-7 business days. If you have any questions, 
+            please contact our admissions office.</p>
+            
+            <p>Best regards,<br>
+            The Rutero Model School Admissions Team</p>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; <%= new Date().getFullYear() %> Rutero Model School. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>

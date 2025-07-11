@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Management</title>
+    <link rel="icon" href="/Images/image.png" type="image/png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/admin-layout.css">
+    <link rel="stylesheet" href="/css/admin-news.css">
+    <link rel="stylesheet" href="/css/admin-messages.css">
+    <link rel="stylesheet" href="/css/admin-confirm.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <%- include('partials/sidebar', { activePage: 'news', username: adminUsername || 'Admin' }) %>
+        <main class="admin-main">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title"><i class="fas fa-newspaper"></i> News Management</h1>
+                    <p class="page-subtitle">Create and manage news articles</p>
+                </div>
+                <button class="btn btn-primary" onclick="openAddModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Add News
+                </button>
+            </div>
+
+            <div class="admin-card">
+                <div class="card-header">
+                    <h2 class="card-title">News Articles</h2>
+                </div>
+                
+                <div class="news-grid">
+                    <% if (newsList && newsList.length > 0) { %>
+                        <% newsList.forEach(function(news, idx) { %>
+                            <div class="news-item">
+                                <div>
+                                    <div class="news-title"><%= news.title %></div>
+                                    <div class="news-meta">
+                                        <span>By <%= news.author %></span>
+                                        <span><%= news.date ? new Date(news.date).toLocaleDateString() : '' %></span>
+                                    </div>
+                                    <div class="news-content-preview">
+                                        <%= news.content.substring(0, 150) %>...
+                                    </div>
+                                </div>
+                                <div class="news-actions">
+                                    <button class="btn btn-primary btn-sm" onclick="viewNews('<%= idx %>')">Read More</button>
+                                    <button class="btn btn-primary btn-sm" onclick="openEditModal('<%= idx %>')">Edit</button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteNews('<%= news._id %>', '<%= news.title %>')">Delete</button>
+                                </div>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <h3>No news articles available</h3>
+                            <p>Add your first news article by clicking the Add News button above</p>
+                        </div>
+                    <% } %>
+                </div>
+                
+                <!-- Pagination -->
+                <% if (typeof page !== 'undefined' && typeof totalPages !== 'undefined' && totalPages > 1) { %>
+                <div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                    <% if (page > 1) { %>
+                        <a href="?page=<%= page - 1 %>" class="btn btn-primary btn-sm">Previous</a>
+                    <% } %>
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                        <a href="?page=<%= i %>" class="btn btn-sm <%= i === page ? 'btn-success' : 'btn-primary' %>"><%= i %></a>
+                    <% } %>
+                    <% if (page < totalPages) { %>
+                        <a href="?page=<%= page + 1 %>" class="btn btn-primary btn-sm">Next</a>
+                    <% } %>
+                </div>
+                <% } %>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add News Modal -->
+    <div id="addNewsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add News Article</h2>
+                <button type="button" class="modal-close-btn" onclick="closeAddModal()">&times;</button>
+            </div>
+            <form action="/admin/news-update/add" method="POST">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <input type="text" id="author" name="author" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" name="date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea id="content" name="content" class="form-control" rows="5" required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-danger" onclick="closeAddModal()">Cancel</button>
+                    <button type="submit" class="btn btn-success">Add News</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit News Modal -->
+    <div id="editNewsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit News Article</h2>
+                <button type="button" class="modal-close-btn" onclick="closeEditModal()">&times;</button>
+            </div>
+            <form method="POST" action="/admin/news-update/edit">
+                <input type="hidden" id="edit-id" name="id">
+                <div class="form-group">
+                    <label for="edit-title">Title</label>
+                    <input type="text" id="edit-title" name="title" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-author">Author</label>
+                    <input type="text" id="edit-author" name="author" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-date">Date</label>
+                    <input type="date" id="edit-date" name="date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-content">Content</label>
+                    <textarea id="edit-content" name="content" class="form-control" rows="5" required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-danger" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View News Modal -->
+    <div id="viewNewsModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2 id="viewNewsTitle">News Title</h2>
+                <button type="button" class="modal-close-btn" onclick="closeViewNewsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="viewNewsMeta" style="color: var(--text-light); margin-bottom: 1.5rem; font-size: 0.875rem;"></div>
+                <div id="viewNewsContent" style="line-height: 1.7;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const newsData = <%- JSON.stringify(newsList || []) %>;
+
+
+
+        function openAddModal() {
+            document.getElementById('addNewsModal').classList.add('show');
+            document.getElementById('date').valueAsDate = new Date();
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAddModal() {
+            document.getElementById('addNewsModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function openEditModal(index) {
+            const news = newsData[index];
+            if (!news) return;
+            document.getElementById('edit-id').value = news._id;
+            document.getElementById('edit-title').value = news.title;
+            document.getElementById('edit-author').value = news.author;
+            document.getElementById('edit-date').value = news.date ? new Date(news.date).toISOString().split('T')[0] : '';
+            document.getElementById('edit-content').value = news.content;
+            document.getElementById('editNewsModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editNewsModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function viewNews(index) {
+            const news = newsData[index];
+            if (!news) return;
+            
+            document.getElementById('viewNewsTitle').textContent = news.title;
+            document.getElementById('viewNewsMeta').innerHTML = `By ${news.author} • ${news.date ? new Date(news.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}`;
+            document.getElementById('viewNewsContent').innerHTML = news.content.replace(/\n/g, '<br>');
+            document.getElementById('viewNewsModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeViewNewsModal() {
+            document.getElementById('viewNewsModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function deleteNews(newsId, newsTitle) {
+            console.log('deleteNews called with:', newsId, newsTitle);
+            
+            // Check if confirmDelete function exists
+            if (typeof confirmDelete !== 'function') {
+                console.error('confirmDelete function not found');
+                // Fallback to native confirm
+                if (confirm(`Are you sure you want to delete "${newsTitle}"?\n\nThis action cannot be undone.`)) {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = `/admin/news-update/delete/${newsId}`;
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+                return;
+            }
+            
+            confirmDelete(
+                'Delete News Article',
+                `Are you sure you want to delete "${newsTitle}"?\n\nThis action cannot be undone.`,
+                function() {
+                    console.log('Creating form for news deletion');
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = `/admin/news-update/delete/${newsId}`;
+                    console.log('Form action:', form.action);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            );
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                closeAddModal();
+                closeEditModal();
+                closeViewNewsModal();
+            }
+        }
+        
+
+    </script>
+    <script src="/js/admin-sidebar.js"></script>
+    <script src="/js/admin-messages.js"></script>
+    <script src="/js/admin-confirm.js"></script>
+    <script src="/js/admin-loading.js"></script>
+</body>
+</html>

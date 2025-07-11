@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proprietor Message</title>
+    <link rel="icon" href="/Images/image.png" type="image/png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/admin-layout.css">
+    <link rel="stylesheet" href="/css/admin-proprietor.css">
+    <link rel="stylesheet" href="/css/admin-messages.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <%- include('partials/sidebar', { activePage: 'proprietor', username: adminUsername || 'Admin' }) %>
+        <main class="admin-main">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title"><i class="fas fa-user-tie"></i> Proprietor Message</h1>
+                    <p class="page-subtitle">Manage the proprietor's message</p>
+                </div>
+                <button class="btn btn-primary" onclick="openModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20h9"></path>
+                        <path d="M16.5 3.5a2.121 2.121 0 1 1 3 3L7 19.5 3 21l1.5-4L16.5 3.5z"></path>
+                    </svg>
+                    Edit Message
+                </button>
+            </div>
+
+            <div class="admin-card">
+                <% if (proprietor) { %>
+                    <div style="display: flex; gap: 2rem; align-items: flex-start;">
+                        <% if (proprietor.image) { %>
+                            <div style="flex-shrink: 0;">
+                                <img src="<%= proprietor.image %>" alt="Proprietor" style="width: 150px; height: 150px; object-fit: cover; border-radius: var(--radius); box-shadow: var(--shadow);">
+                            </div>
+                        <% } %>
+                        <div style="flex: 1;">
+                            <h2 style="margin: 0 0 0.5rem 0; color: var(--text);"><%= proprietor.title %></h2>
+                            <div style="color: var(--text-light); margin-bottom: 1.5rem; font-size: 0.875rem;">
+                                By <%= proprietor.author %> • <%= proprietor.date ? new Date(proprietor.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '' %>
+                            </div>
+                            <p style="line-height: 1.7; color: var(--text); margin: 0;"><%= proprietor.content %></p>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div style="text-align: center; padding: 3rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-light); margin-bottom: 1rem;">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <h3 style="color: var(--text); margin-bottom: 0.5rem;">No proprietor message set</h3>
+                        <p style="color: var(--text-light);">Click "Edit Message" to add the proprietor's message</p>
+                    </div>
+                <% } %>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Proprietor Message</h2>
+                <button type="button" class="modal-close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <form action="/admin/proprietor/update" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" class="form-control" value="<%= proprietor ? proprietor.title : '' %>" required>
+                </div>
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <input type="text" id="author" name="author" class="form-control" value="<%= proprietor ? proprietor.author : '' %>" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" name="date" class="form-control" value="<%= proprietor && proprietor.date ? new Date(proprietor.date).toISOString().split('T')[0] : '' %>" required>
+                </div>
+                <div class="form-group">
+                    <label for="image">Image</label>
+                    <input type="file" id="image" name="image" class="form-control" accept="image/*">
+                    <% if (proprietor && proprietor.image) { %>
+                        <small style="color: var(--text-light);">Current image uploaded</small>
+                    <% } %>
+                </div>
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea id="content" name="content" class="form-control" rows="6" required><%= proprietor ? proprietor.content : '' %></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-danger" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+
+
+        function openModal() {
+            document.getElementById('editModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('editModal').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                closeModal();
+            }
+        }
+        
+
+    </script>
+    <script src="/js/admin-sidebar.js"></script>
+    <script src="/js/admin-messages.js"></script>
+    <script src="/js/admin-loading.js"></script>
+</body>
+</html>

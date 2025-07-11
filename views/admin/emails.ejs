@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Emails - Admin Panel</title>
+    <link rel="icon" href="/Images/image.png" type="image/png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/css/admin-layout.css">
+    <link rel="stylesheet" href="/css/admin-emails.css">
+    <link rel="stylesheet" href="/css/admin-messages.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <%- include('partials/sidebar', { activePage: 'emails', username: adminUsername || 'Admin' }) %>
+        <main class="admin-main">
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title"><i class="fas fa-envelope"></i> Contact Emails</h1>
+                    <p class="page-subtitle">Manage and respond to contact form submissions</p>
+                </div>
+            </div>
+            
+            <div class="message-container" id="messageContainer"></div>
+            
+            <% if (typeof error !== 'undefined' && error) { %>
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        showMessage(`<%= error %>`, 'error');
+                        setTimeout(() => {
+                            window.location.href = '/admin/emails';
+                        }, 3000);
+                    });
+                </script>
+            <% } %>
+            <% if (typeof success !== 'undefined' && success) { %>
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        showMessage(`<%= success %>`, 'success');
+                        setTimeout(() => {
+                            window.location.href = '/admin/emails';
+                        }, 2000);
+                    });
+                </script>
+            <% } %>
+            
+            <% if (emails && emails.length > 0) { %>
+                    <!-- Desktop Table View -->
+                    <div class="emails-table-container">
+                        <table class="emails-table">
+                            <thead>
+                                <tr>
+                                    <th>Contact</th>
+                                    <th>Subject</th>
+                                    <th>Message</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% emails.forEach(email => { %>
+                                    <tr class="email-row">
+                                        <td class="contact-cell">
+                                            <div class="contact-info">
+                                                <div class="contact-name"><%= email.name %></div>
+                                                <div class="contact-email"><%= email.email %></div>
+                                            </div>
+                                        </td>
+                                        <td class="subject-cell">
+                                            <span class="subject-text"><%= email.subject %></span>
+                                        </td>
+                                        <td class="message-cell">
+                                            <div class="message-preview" onclick="openMessageModal(`<%= email.message.replace(/`/g, '\\`').replace(/\n/g, '\\n').replace(/'/g, '\\\'') %>`)" title="Click to read full message">
+                                                <%= email.message.substring(0, 50) %><% if (email.message.length > 50) { %>...<% } %>
+                                            </div>
+                                        </td>
+                                        <td class="status-cell">
+                                            <span class="status-badge <%= email.status %>">
+                                                <i class="fas <%= email.status === 'replied' ? 'fa-check-circle' : 'fa-clock' %>"></i>
+                                                <%= email.status === 'replied' ? 'Replied' : 'Pending' %>
+                                            </span>
+                                        </td>
+                                        <td class="date-cell">
+                                            <div class="date-info">
+                                                <div class="date-main"><%= new Date(email.sentAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) %></div>
+                                                <div class="date-time"><%= new Date(email.sentAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) %></div>
+                                            </div>
+                                        </td>
+                                        <td class="actions-cell">
+                                            <div class="action-buttons">
+                                                <button class="btn-action btn-view" onclick="openViewModal('<%= email._id %>', '<%= email.name %>', '<%= email.email %>', '<%= email.subject %>', `<%= email.message.replace(/`/g, '\\`').replace(/\n/g, '\\n') %>`, '<%= email.status %>', '<%= email.reply || '' %>')" title="View">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn-action btn-reply" onclick="openReplyModal('<%= email._id %>', '<%= email.name %>', '<%= email.email %>')" title="Reply">
+                                                    <i class="fas fa-reply"></i>
+                                                </button>
+                                                <button class="btn-action btn-delete" onclick="openDeleteModal('<%= email._id %>', '<%= email.name %>')" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Mobile Card View -->
+                    <div class="emails-cards">
+                        <% emails.forEach(email => { %>
+                            <div class="email-card">
+                                <div class="email-card-header">
+                                    <div class="email-card-contact">
+                                        <div class="contact-name"><%= email.name %></div>
+                                        <div class="contact-email"><%= email.email %></div>
+                                    </div>
+                                    <div class="email-card-status">
+                                        <span class="status-badge <%= email.status %>">
+                                            <i class="fas <%= email.status === 'replied' ? 'fa-check-circle' : 'fa-clock' %>"></i>
+                                            <%= email.status === 'replied' ? 'Replied' : 'Pending' %>
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="email-card-subject"><%= email.subject %></div>
+                                
+                                <div class="email-card-message" onclick="openMessageModal(`<%= email.message.replace(/`/g, '\\`').replace(/\n/g, '\\n').replace(/'/g, '\\\'') %>`)">
+                                    <%= email.message.substring(0, 100) %><% if (email.message.length > 100) { %>...<% } %>
+                                </div>
+                                
+                                <div class="email-card-footer">
+                                    <div class="email-card-date">
+                                        <%= new Date(email.sentAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) %> • 
+                                        <%= new Date(email.sentAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) %>
+                                    </div>
+                                    <div class="email-card-actions">
+                                        <button class="btn-action btn-view" onclick="openViewModal('<%= email._id %>', '<%= email.name %>', '<%= email.email %>', '<%= email.subject %>', `<%= email.message.replace(/`/g, '\\`').replace(/\n/g, '\\n') %>`, '<%= email.status %>', '<%= email.reply || '' %>')" title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button class="btn-action btn-reply" onclick="openReplyModal('<%= email._id %>', '<%= email.name %>', '<%= email.email %>')" title="Reply">
+                                            <i class="fas fa-reply"></i>
+                                        </button>
+                                        <button class="btn-action btn-delete" onclick="openDeleteModal('<%= email._id %>', '<%= email.name %>')" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+
+                    <!-- Pagination -->
+                    <% if (totalPages > 1) { %>
+                        <div class="pagination-wrapper">
+                            <div class="pagination">
+                                <% if (page > 1) { %>
+                                    <a href="?page=<%= page - 1 %>" class="pagination-btn">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                <% } %>
+                                
+                                <span class="pagination-info">Page <%= page %> of <%= totalPages %></span>
+                                
+                                <% if (page < totalPages) { %>
+                                    <a href="?page=<%= page + 1 %>" class="pagination-btn">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                <% } %>
+                            </div>
+                        </div>
+                    <% } %>
+                <% } else { %>
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-inbox"></i>
+                        </div>
+                        <h3>No emails received yet</h3>
+                        <p>Contact form submissions will appear here when visitors send messages</p>
+                    </div>
+                <% } %>
+        </main>
+    </div>
+
+    <!-- Message Modal -->
+    <div id="messageModal" class="modal-overlay">
+        <div class="modal-container message-modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-envelope"></i> Full Message</h2>
+                <button class="modal-close" onclick="closeMessageModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="message-content" id="fullMessageContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Email Modal -->
+    <div id="viewModal" class="modal-overlay">
+        <div class="modal-container view-modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-envelope-open"></i> Email Details</h2>
+                <button class="modal-close" onclick="closeViewModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-form">
+                <div class="email-details">
+                    <div class="detail-row">
+                        <strong>From:</strong> <span id="viewName"></span> &lt;<span id="viewEmail"></span>&gt;
+                    </div>
+                    <div class="detail-row">
+                        <strong>Subject:</strong> <span id="viewSubject"></span>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Status:</strong> <span id="viewStatus" class="status-badge"></span>
+                    </div>
+                    <div class="detail-section">
+                        <strong>Original Message:</strong>
+                        <div class="message-content" id="viewMessage"></div>
+                    </div>
+                    <div class="detail-section" id="replySection" style="display: none;">
+                        <strong>Your Reply:</strong>
+                        <div class="reply-content" id="viewReply"></div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeViewModal()" class="btn-secondary">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/js/admin-sidebar.js"></script>
+
+    <!-- Reply Modal -->
+    <div id="replyModal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2><i class="fas fa-reply"></i> Reply to Email</h2>
+                <button class="modal-close" onclick="closeReplyModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="replyForm" method="POST" class="modal-form">
+                <div class="form-field">
+                    <label class="field-label">To:</label>
+                    <input type="text" id="replyTo" class="field-input" readonly>
+                </div>
+                <div class="form-field">
+                    <label for="replyMessage" class="field-label">Your Reply:</label>
+                    <textarea id="replyMessage" name="replyMessage" class="field-textarea" rows="6" placeholder="Type your reply here..." required></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeReplyModal()" class="btn-secondary">Cancel</button>
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-paper-plane"></i> Send Reply
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal-container delete-modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-exclamation-triangle"></i> Confirm Delete</h2>
+                <button class="modal-close" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-form">
+                <p>Are you sure you want to delete this email from <strong id="deleteEmailName"></strong>?</p>
+                <p class="warning-text">This action cannot be undone.</p>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeDeleteModal()" class="btn-secondary">Cancel</button>
+                    <form id="deleteForm" method="POST" style="display: inline;">
+                        <button type="submit" class="btn-danger">
+                            <i class="fas fa-trash"></i> Delete Email
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openReplyModal(id, name, email) {
+            const modal = document.getElementById('replyModal');
+            modal.style.display = 'flex';
+            document.getElementById('replyTo').value = `${name} <${email}>`;
+            document.getElementById('replyForm').action = `/admin/emails/reply/${id}`;
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeReplyModal() {
+            const modal = document.getElementById('replyModal');
+            modal.style.display = 'none';
+            document.getElementById('replyMessage').value = '';
+            document.body.style.overflow = '';
+        }
+
+        function openDeleteModal(id, name) {
+            const modal = document.getElementById('deleteModal');
+            modal.style.display = 'flex';
+            document.getElementById('deleteEmailName').textContent = name;
+            document.getElementById('deleteForm').action = `/admin/emails/delete/${id}`;
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDeleteModal() {
+            const modal = document.getElementById('deleteModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        function openViewModal(id, name, email, subject, message, status, reply) {
+            const modal = document.getElementById('viewModal');
+            modal.style.display = 'flex';
+            
+            document.getElementById('viewName').textContent = name;
+            document.getElementById('viewEmail').textContent = email;
+            document.getElementById('viewSubject').textContent = subject;
+            document.getElementById('viewMessage').textContent = message;
+            
+            const statusBadge = document.getElementById('viewStatus');
+            statusBadge.textContent = status === 'replied' ? 'Replied' : 'Pending';
+            statusBadge.className = `status-badge ${status}`;
+            
+            const replySection = document.getElementById('replySection');
+            if (status === 'replied' && reply) {
+                document.getElementById('viewReply').textContent = reply;
+                replySection.style.display = 'block';
+            } else {
+                replySection.style.display = 'none';
+            }
+            
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeViewModal() {
+            const modal = document.getElementById('viewModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        function openMessageModal(message) {
+            const modal = document.getElementById('messageModal');
+            modal.style.display = 'flex';
+            document.getElementById('fullMessageContent').textContent = message;
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMessageModal() {
+            const modal = document.getElementById('messageModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        window.onclick = function(event) {
+            const replyModal = document.getElementById('replyModal');
+            const deleteModal = document.getElementById('deleteModal');
+            const viewModal = document.getElementById('viewModal');
+            const messageModal = document.getElementById('messageModal');
+            if (event.target === replyModal) {
+                closeReplyModal();
+            }
+            if (event.target === deleteModal) {
+                closeDeleteModal();
+            }
+            if (event.target === viewModal) {
+                closeViewModal();
+            }
+            if (event.target === messageModal) {
+                closeMessageModal();
+            }
+        }
+
+        // Auto-hide success message
+        const successAlert = document.getElementById('successAlert');
+        if (successAlert) {
+            setTimeout(() => {
+                successAlert.style.opacity = '0';
+                setTimeout(() => successAlert.remove(), 300);
+            }, 3000);
+        }
+
+        function showMessage(text, type = 'info') {
+            const container = document.getElementById('messageContainer');
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.innerHTML = `
+                <i class="message-icon fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+                <span class="message-text">${text}</span>
+                <button class="message-close" onclick="this.parentElement.remove()">&times;</button>
+            `;
+            container.appendChild(message);
+            setTimeout(() => message.classList.add('show'), 100);
+            setTimeout(() => message.remove(), 5000);
+        }
+        
+        // Real-time email checking
+        let totalEmailCount = <%= typeof totalEmails !== 'undefined' ? totalEmails : (emails ? emails.length : 0) %>;
+        
+        function checkForNewEmails() {
+            fetch('/admin/api/emails?page=1')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.totalEmails > totalEmailCount) {
+                        totalEmailCount = data.totalEmails;
+                        showMessage('New email received!', 'success');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
+                    }
+                })
+                .catch(error => console.log('Email check failed'));
+        }
+        
+        // Check for new emails every 10 seconds
+        setInterval(checkForNewEmails, 10000);
+    </script>
+</body>
+</html>

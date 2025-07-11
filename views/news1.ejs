@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latest News - Rutero Model School</title>
+    <link rel="icon" href="Images/image.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/news.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="header-background">
+            <div class="header-overlay"></div>
+            <div class="header-pattern"></div>
+        </div>
+        <div class="container">
+            <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+                <ol class="breadcrumb-list">
+                    <li><a href="/" class="breadcrumb-link">Home</a></li>
+                    <li aria-current="page">News</li>
+                </ol>
+                <button onclick="window.location.href='/#news'" class="back-btn" aria-label="Go back">
+                    <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                    <span>Back</span>
+                </button>
+            </nav>
+            <div class="header-content">
+                <h1 class="page-title">Latest News & Updates</h1>
+                <p class="page-subtitle">Stay informed with the latest happenings at Rutero Model School</p>
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-newspaper" aria-hidden="true"></i>
+                        <span id="total-articles"><%= totalItems %></span>
+                        <span>Articles</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Filter and Search Section -->
+            <section class="content-controls">
+                <div class="search-box">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                    <input type="text" id="searchInput" placeholder="Search news articles..." aria-label="Search news">
+                </div>
+                <div class="filter-controls">
+                    <select id="categoryFilter" aria-label="Filter by category">
+                        <option value="">All Categories</option>
+                        <% if (categories && categories.length > 0) { %>
+                            <% categories.forEach(function(category) { %>
+                                <option value="<%= category.toLowerCase() %>"><%= category %></option>
+                            <% }); %>
+                        <% } %>
+                    </select>
+                    <select id="sortBy" aria-label="Sort articles">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="title">By Title</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- News Grid -->
+            <section class="news-section" aria-label="News articles">
+                <div id="newsGrid" class="news-grid">
+                    <% if (allNews && allNews.length > 0) { %>
+                        <% allNews.forEach(function(article) { %>
+                            <div class="news-card">
+                                <div class="news-header">
+                                    <div class="news-meta">
+                                        <span class="news-date">
+                                            <i class="far fa-calendar-alt"></i>
+                                            <%= article.date ? new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '' %>
+                                        </span>
+                                        <% if (article.category) { %>
+                                            <span class="news-category" data-category="<%= article.category.toLowerCase() %>"><%= article.category %></span>
+                                        <% } %>
+                                    </div>
+                                    <h3 class="news-title"><%= article.title %></h3>
+                                    <% if (article.author) { %>
+                                        <p class="news-author">By <%= article.author %></p>
+                                    <% } %>
+                                </div>
+                                <div class="news-content">
+                                    <div class="news-excerpt"><%= article.content ? (article.content.length > 150 ? article.content.substring(0, 150) + '...' : article.content) : '' %></div>
+                                    <button class="view-more-btn" onclick="openNewsModal('<%= article.title %>', '<%= article.content %>', '<%= article.date ? new Date(article.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '' %>', '<%= article.author || '' %>', '<%= article.category || '' %>')">
+                                        Read More
+                                    </button>
+                                </div>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-newspaper" aria-hidden="true"></i>
+                            </div>
+                            <h3>No News Available</h3>
+                            <p>Check back later for the latest updates and announcements.</p>
+                        </div>
+                    <% } %>
+                </div>
+
+                <!-- Pagination -->
+                <nav class="pagination-container" aria-label="News pagination">
+                    <div class="pagination-info">
+                        <span>Showing <strong id="showing-start"><%= ((currentPage - 1) * 6) + 1 %></strong>-<strong id="showing-end"><%= Math.min(currentPage * 6, totalItems) %></strong> of <strong id="total-news"><%= totalItems %></strong> results</span>
+                    </div>
+                    <div class="pagination-controls">
+                        <button class="pagination-btn prev-btn" <%= currentPage === 1 ? 'disabled' : '' %> onclick="window.location.href='/news?page=<%= currentPage - 1 %>'" aria-label="Previous page">
+                            <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                            <span>Previous</span>
+                        </button>
+                        <div class="pagination-numbers" role="group" aria-label="Page numbers">
+                            <% if (totalPages > 0) { %>
+                                <% for (let i = 1; i <= totalPages; i++) { %>
+                                    <button class="pagination-btn <%= i === currentPage ? 'active' : '' %>" onclick="window.location.href='/news?page=<%= i %>'">
+                                        <%= i %>
+                                    </button>
+                                <% } %>
+                            <% } %>
+                        </div>
+                        <button class="pagination-btn next-btn" <%= currentPage >= totalPages || totalPages === 0 ? 'disabled' : '' %> onclick="window.location.href='/news?page=<%= currentPage + 1 %>'" aria-label="Next page">
+                            <span>Next</span>
+                            <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </nav>
+            </section>
+        </div>
+    </main>
+
+    <!-- News Modal -->
+    <div id="newsModal" class="modal" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-backdrop" onclick="closeNewsModal()"></div>
+        <div class="modal-content">
+            <header class="modal-header">
+                <button class="modal-close" onclick="closeNewsModal()" aria-label="Close modal">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+                <h2 id="modalTitle" class="modal-title"></h2>
+                <div id="modalMeta" class="modal-meta"></div>
+            </header>
+            <div id="modalContent" class="modal-body"></div>
+            <footer class="modal-footer">
+                <button class="share-btn" onclick="shareArticle()">
+                    <i class="fas fa-share-alt" aria-hidden="true"></i>
+                    Share Article
+                </button>
+            </footer>
+        </div>
+    </div>
+
+    <%- include('partials/footer') %>
+    
+    <!-- Scripts -->
+    <script src="js/news.js"></script>
+</body>
+</html>
