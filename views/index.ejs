@@ -19,7 +19,7 @@
             <div class="slide-overlay"></div>
             <div class="slide-content">
                 <h1 class="hero-title">Welcome To Rutero Model School</h1>
-                <p class="hero-subtitle">A non-profit-making, comprehensive and co-educational school established to break new grounds in the area of facilitating and actualising the potential of its students</p>
+                <p class="hero-subtitle">A comprehensive and co-educational school established to break new grounds in the area of facilitating and actualising the potential of its students</p>
                 <div class="hero-buttons">
                     <a href="/contact" class="btn-primary">Contact Us</a>
                     <a href="/about" class="btn-secondary">Learn More</a>
@@ -73,7 +73,11 @@
         <div class="banner-content">
             <span class="banner-icon">📢</span>
             <div class="banner-text">
-                <strong>Welcome to Rutero Model School!</strong> - Admissions now open for 2024/2025 academic session
+                <% if (banner && banner.text) {%>
+                    <p><strong>Welcome to Rutero Model School! </strong><%= banner.text %></p>
+                <% } else {%>
+                    <p><strong>Welcome to Rutero Model School!</strong> - Admissions now open for the academic session</p>
+                <% } %>
             </div>
         </div>
     </div>
@@ -133,8 +137,8 @@
                         <h2>Latest News</h2>
                     </div>
                     
-                    <% if (latestNews && latestNews.length > 0) { %>
-                        <% latestNews.forEach(function(news, index) { %>
+                    <% if (latestNews && latestNews.length > 0) {%>
+                        <% latestNews.forEach(function(news, index) {%>
                             <article class="news-article" data-aos="fade-up" data-aos-delay="<%= index * 100 %>">
                                 <h3><%= news.title %></h3>
                                 <div class="article-meta">
@@ -144,7 +148,7 @@
                                 <a href="javascript:void(0)" class="read-more" onclick="openNewsPopup(<%= index %>)">Read More →</a>
                             </article>
                         <% }) %>
-                    <% } else { %>
+                    <% } else {%>
                         <article class="news-article" data-aos="fade-up">
                             <h3>No News Available</h3>
                             <div class="article-meta">
@@ -167,7 +171,7 @@
                         <h2>Announcements</h2>
                     </div>
                     
-                    <% if (proprietor) { %>
+                    <% if (proprietor) {%>
                         <div class="featured-announcement" data-aos="fade-up">
                             <div class="announcement-image">
                                 <img src="<%= proprietor.image %>" alt="Proprietor Message">
@@ -181,7 +185,7 @@
                                 <a href="javascript:void(0)" class="read-more" onclick="openProprietorModal()">Read Full Message →</a>
                             </div>
                         </div>
-                    <% } else { %>
+                    <% } else {%>
                         <div class="featured-announcement" data-aos="fade-up">
                             <div class="announcement-image">
                                 <img src="Images/PHOTO-2024-05-01-10-27-35.jpg" alt="Proprietor Message">
@@ -198,8 +202,8 @@
                     <% } %>
 
                     <div class="quick-announcements" id="quick-announcements">
-                        <% if (latestAnnouncements && latestAnnouncements.length > 0) { %>
-                            <% latestAnnouncements.forEach(function(announcement) { %>
+                        <% if (latestAnnouncements && latestAnnouncements.length > 0) {%>
+                            <% latestAnnouncements.forEach(function(announcement) {%>
                                 <div class="quick-announcement">
                                     <div class="announcement-date">
                                         <span class="day"><%= new Date(announcement.date).getDate() %></span>
@@ -211,7 +215,7 @@
                                     </div>
                                 </div>
                             <% }) %>
-                        <% } else { %>
+                        <% } else {%>
                             <div class="quick-announcement">
                                 <div class="announcement-date">
                                     <span class="day">--</span>
@@ -244,7 +248,7 @@
     </div>
 
     <!-- Proprietor Modal -->
-    <% if (proprietor) { %>
+    <% if (proprietor) {%>
     <div id="proprietorModal" class="modal">
         <div class="modal-content">
             <button onclick="closeProprietorModal()" class="modal-close">&times;</button>
@@ -273,14 +277,14 @@
         }
         
         function openProprietorModal() {
-            <% if (proprietor) { %>
+            <% if (proprietor) {%>
                 document.getElementById('proprietorModal').style.display = 'flex';
                 document.body.style.overflow = 'hidden';
             <% } %>
         }
         
         function closeProprietorModal() {
-            <% if (proprietor) { %>
+            <% if (proprietor) {%>
                 document.getElementById('proprietorModal').style.display = 'none';
                 document.body.style.overflow = '';
             <% } %>
@@ -290,7 +294,7 @@
             if (event.target.id === 'newsModal') {
                 closeNewsPopup();
             }
-            <% if (proprietor) { %>
+            <% if (proprietor) {%>
                 if (event.target.id === 'proprietorModal') {
                     closeProprietorModal();
                 }

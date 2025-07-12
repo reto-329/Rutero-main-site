@@ -25,6 +25,31 @@ body {
     line-height: 1.5;
 }
 
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  gap: 0.75rem;
+  transition: var(--transition-smooth);
+}
+
+.logo {
+  width: 60px;
+  height: auto;
+  object-fit: contain;
+  transition: var(--transition-smooth);
+}
+
+.brand-line {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.5px;
+    white-space: normal;
+    word-break: break-word;
+}
+
 .dashboard-container {
     min-height: 100vh;
     display: flex;
@@ -46,17 +71,13 @@ body {
     font-weight: 600;
 }
 
-.dashboard-main {
-    padding: 2rem;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
+.dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
 }
 
-.dashboard-card {
+.admin-card {
     background-color: var(--card-bg);
     border-radius: 0.5rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -65,12 +86,12 @@ body {
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.dashboard-card:hover {
+.admin-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.dashboard-card h2 {
+.admin-card h2 {
     font-size: 1.125rem;
     font-weight: 600;
     margin-bottom: 1.25rem;
@@ -80,19 +101,19 @@ body {
     gap: 0.5rem;
 }
 
-.dashboard-card ul {
+.admin-card ul {
     list-style: none;
 }
 
-.dashboard-card ul li {
+.admin-card ul li {
     margin-bottom: 0.75rem;
 }
 
-.dashboard-card ul li:last-child {
+.admin-card ul li:last-child {
     margin-bottom: 0;
 }
 
-.dashboard-card ul li a {
+.admin-card ul li a {
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -103,7 +124,7 @@ body {
     transition: all 0.2s;
 }
 
-.dashboard-card ul li a:hover {
+.admin-card ul li a:hover {
     background-color: var(--primary-light);
     color: var(--primary);
 }
@@ -122,8 +143,17 @@ body {
         text-align: center;
     }
 
-    .dashboard-main {
-        padding: 1rem;
+    .dashboard-grid {
         grid-template-columns: 1fr;
     }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    width: 40px;
+  }
+
+  .brand-line {
+    font-size: 1.1rem;
+  }
 }

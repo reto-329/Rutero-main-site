@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Banner</title>
+    <link rel="stylesheet" href="/css/admin-layout.css">
+    <link rel="stylesheet" href="/css/admin-banner.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="admin-layout">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <%- include('partials/sidebar')%>
+        <main class="admin-main">
+            <div class="page-header">
+                <h1 class="page-title">Manage Homepage Banner</h1>
+            </div>
+    
+            <div class="banner-form-container">
+                <form action="/admin/banner" method="POST" class="banner-form">
+                    <label for="bannerText">Banner Content</label>
+                    <textarea id="bannerText" name="bannerText" rows="5" placeholder="Enter the full banner text here..." required><%= banner ? banner.text : '' %></textarea>
+                    <button type="submit" class="btn-update-banner">Update Banner</button>
+                </form>
+
+                <% if (banner && banner.text) { %>
+                    <div class="current-banner-preview">
+                        <h3>Current Live Banner</h3>
+                        <p><%= banner.text %></p>
+                    </div>
+                <% } %>
+            </div>
+        </main>
+    </div>
+    
+    <script src="/js/admin-sidebar.js"></script>
+</body>
+</html>

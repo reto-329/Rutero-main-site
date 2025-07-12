@@ -4,9 +4,12 @@ const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 const session = require("express-session");
 const multer = require("multer");
+const { SitemapStream, streamToPromise } = require('sitemap');
+const { createGzip } = require('zlib');
 const path = require("path");
 const adminRoutes = require("./routes/adminRoutes"); // Import admin routes
 const newsRoutes = require('./routes/newsRoutes');
+const bannerRoutes = require('./routes/bannerRoutes'); // Import banner routes
 require("dotenv").config(); // Load environment variables from .env file
 
 const admissionController = require('./controllers/admissionController');
@@ -57,15 +60,51 @@ mongoose.connection.on('disconnected', () => {
 });
 
 // Routes
+
+// Add this route (place with your other routes)
+app.get('/sitemap.xml', async (req, res) => {
+  res.header('Content-Type', 'application/xml');
+  res.header('Content-Encoding', 'gzip');
+  
+  try {
+    const smStream = new SitemapStream({
+      hostname: 'https://ruteromodelschool.com'
+    });
+    
+    const pipeline = smStream.pipe(createGzip());
+    
+    // Add your URLs here
+    smStream.write({ url: '/', changefreq: 'daily', priority: 1.0 });
+    smStream.write({ url: '/about', changefreq: 'monthly', priority: 0.8 });
+    smStream.write({ url: '/admission', changefreq: 'monthly', priority: 0.8 });
+    smStream.write({ url: '/contact', changefreq: 'monthly', priority: 0.7 });
+    smStream.write({ url: '/gallery', changefreq: 'weekly', priority: 0.9 });
+    
+    smStream.end();
+    
+    // Cache the sitemap
+    const sitemap = await streamToPromise(pipeline);
+    
+    res.write(sitemap);
+    res.end();
+  } catch (e) {
+    console.error(e);
+    res.status(500).end();
+  }
+});
+
+
 app.get("/", async (req, res) => {
     try {
         const News = require('./models/newsModel');
         const Announcement = require('./models/announcementModel');
         const Proprietor = require('./models/proprietorModel');
+        const Banner = require('./models/bannerModel');
         const latestNews = await News.find().sort({ date: -1 }).limit(3);
         const latestAnnouncements = await Announcement.find().sort({ date: -1 }).limit(2);
         const proprietor = await Proprietor.findOne();
-        res.render("index", { activePage: "home", latestNews, latestAnnouncements, proprietor });
+        const banner = await Banner.findOne();
+        res.render("index", { activePage: "home", latestNews, latestAnnouncements, proprietor, banner });
     } catch (err) {
         console.error('Error fetching data:', err);
         res.render("index", { activePage: "home", latestNews: [], latestAnnouncements: [], proprietor: null });
@@ -214,6 +253,7 @@ app.post('/submit-admission', admissionController.submitApplication);
 
 // Admin routes
 app.use("/admin", adminRoutes);
+app.use("/admin", bannerRoutes);
 app.use(newsRoutes);
 
 

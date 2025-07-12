@@ -50,8 +50,8 @@
     height: 100%;
     background: linear-gradient(
         135deg,
-        rgba(135, 206, 235, 0.8) 0%,
-        rgba(70, 130, 180, 0.9) 100%
+        rgba(135, 206, 235, 0.5) 0%,
+        rgba(70, 130, 180, 0.6) 100%
     );
 }
 
@@ -77,9 +77,9 @@
     font-size: 1.3rem;
     font-weight: 300;
     margin-bottom: 2.5rem;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.4);
     line-height: 1.6;
-    opacity: 0.95;
+    opacity: 1;
 }
 
 .hero-buttons {
@@ -616,6 +616,12 @@
     .container {
         padding: 0 1rem;
     }
+
+    .slide-bg {
+        background-attachment: scroll; /* Better for mobile performance */
+        transform: none; /* Disable zoom animation on smaller screens */
+        transition: none;
+    }
 }
 
 @media (max-width: 480px) {
@@ -642,6 +648,11 @@
     
     .news-section {
         padding: 3rem 0;
+    }
+
+    .slide-bg {
+        background-size: cover;
+        background-attachment: scroll;
     }
 }
 
@@ -746,85 +757,13 @@
 
 /* Slide background images */
 .slide-bg-1 {
-    background-image: url('../Images/lab/lab12.jpg');
+    background-image: url('../Images/1st.jpg');
 }
 
 .slide-bg-2 {
-    background-image: url('../Images/lab/lab23.jpg');
+    background-image: url('../Images/2nd.jpg');
 }
 
 .slide-bg-3 {
-    background-image: url('../Images/class/class1.jpg');
-}
-
-/* Modal Styles */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.7);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-}
-
-.modal-content {
-    background: white;
-    padding: 3rem;
-    border-radius: 15px;
-    max-width: 900px;
-    width: 95%;
-    max-height: 90vh;
-    overflow-y: auto;
-    position: relative;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-}
-
-.modal-close {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    background: none;
-    border: none;
-    font-size: 30px;
-    cursor: pointer;
-    color: #999;
-}
-
-.modal-title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: #333;
-}
-
-.modal-meta {
-    color: #666;
-    margin: 15px 0;
-    font-size: 16px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 15px;
-}
-
-.modal-content-text {
-    line-height: 1.8;
-    margin-top: 25px;
-    font-size: 16px;
-    color: #444;
-}
-
-/* Slide background images */
-.slide-bg-1 {
-    background-image: url('Images/lab/lab12.jpg');
-}
-
-.slide-bg-2 {
-    background-image: url('Images/lab/lab23.jpg');
-}
-
-.slide-bg-3 {
-    background-image: url('Images/class/class1.jpg');
+    background-image: url('../Images/3rd.jpg');
 }
