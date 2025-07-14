@@ -3,7 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>::HOME PAGE::</title>
+    <title>Rutero Model School | Top-Ranked Private School in Jeddo, Delta State</title>
+    <meta name="description" content="Rutero Model School in Jeddo offers exceptional education from nursery to secondary. We develop future leaders through academic excellence, moral values, and innovative learning in Delta State.">
+    <link rel="canonical" href="https://ruteromodelschool.com" />
+    
+    <!-- Enhanced Schema Markup for Jeddo -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "School",
+      "name": "Rutero Model School",
+      "url": "https://ruteromodelschool.com",
+      "logo": "https://ruteromodelschool.com/images/logo.png",
+      "image": "https://ruteromodelschool.com/images/school-building.jpg",
+      "description": "Top-ranked educational institution shaping young minds in Jeddo, Delta State",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Rutero Street",
+        "addressLocality": "Jeddo",
+        "addressRegion": "Delta State",
+        "postalCode": "330101",
+        "addressCountry": "Nigeria"
+      },
+      "telephone": "+2347033697841",
+      "openingHours": "Mo-Fr 07:30-17:00",
+      "sameAs": [
+        "https://www.facebook.com/Ruteromodelschool/",
+        "https://www.instagram.com/_ruteromodelschooljeddo/"
+      ]
+    }
+    </script>
+    
     <link rel="icon" href="Images/image.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -71,7 +101,7 @@
 
     <div class="announcement-banner">
         <div class="banner-content">
-            <span class="banner-icon">📢</span>
+            <span class="banner-icon">ðŸ“¢</span>
             <div class="banner-text">
                 <% if (banner && banner.text) {%>
                     <p><strong>Welcome to Rutero Model School! </strong><%= banner.text %></p>
@@ -97,7 +127,7 @@
                     <div class="feature-content">
                         <h3>Admissions</h3>
                         <p>RUTERO gives admission to brilliant and intelligent young boys and girls every year, fostering academic excellence and character development.</p>
-                        <a href="/admission" class="feature-link">Learn More →</a>
+                        <a href="/admission" class="feature-link">Learn More â†’</a>
                     </div>
                 </div>
 
@@ -108,7 +138,7 @@
                     <div class="feature-content">
                         <h3>School Programmes</h3>
                         <p>RUTERO offers your child a great deal of opportunities to explore all possibilities in life through comprehensive educational programs.</p>
-                        <a href="/about" class="feature-link">Explore →</a>
+                        <a href="/about" class="feature-link">Explore â†’</a>
                     </div>
                 </div>
 
@@ -119,7 +149,7 @@
                     <div class="feature-content">
                         <h3>School Events</h3>
                         <p>Be in the know. Have a look at our well-planned timetable and exciting events for the 2024/2025 academic session.</p>
-                        <a href="#quick-announcements" class="feature-link">View Calendar →</a>
+                        <a href="#quick-announcements" class="feature-link">View Calendar â†’</a>
                     </div>
                 </div>
             </div>
@@ -142,17 +172,17 @@
                             <article class="news-article" data-aos="fade-up" data-aos-delay="<%= index * 100 %>">
                                 <h3><%= news.title %></h3>
                                 <div class="article-meta">
-                                    <span>by <%= news.author %></span> • <span><%= news.date ? new Date(news.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'No date' %></span> • <span><%= news.category %></span>
+                                    <span>by <%= news.author %></span> â€¢ <span><%= news.date ? new Date(news.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'No date' %></span> â€¢ <span><%= news.category %></span>
                                 </div>
                                 <p><%= news.content.substring(0, 150) %>...</p>
-                                <a href="javascript:void(0)" class="read-more" onclick="openNewsPopup(<%= index %>)">Read More →</a>
+                                <a href="javascript:void(0)" class="read-more" onclick="openNewsPopup(<%= index %>)">Read More â†’</a>
                             </article>
                         <% }) %>
                     <% } else {%>
                         <article class="news-article" data-aos="fade-up">
                             <h3>No News Available</h3>
                             <div class="article-meta">
-                                <span>by ADMIN</span> • <span>Today</span> • <span>General</span>
+                                <span>by ADMIN</span> â€¢ <span>Today</span> â€¢ <span>General</span>
                             </div>
                             <p>No news articles have been published yet. Please check back later for updates.</p>
                         </article>
@@ -179,10 +209,10 @@
                             <div class="announcement-content">
                                 <h3><%= proprietor.title %></h3>
                                 <div class="article-meta">
-                                    <span>by <%= proprietor.author %></span> • <span><%= proprietor.date ? new Date(proprietor.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '' %></span>
+                                    <span>by <%= proprietor.author %></span> â€¢ <span><%= proprietor.date ? new Date(proprietor.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '' %></span>
                                 </div>
                                 <p><%= proprietor.content.substring(0, 150) %>...</p>
-                                <a href="javascript:void(0)" class="read-more" onclick="openProprietorModal()">Read Full Message →</a>
+                                <a href="javascript:void(0)" class="read-more" onclick="openProprietorModal()">Read Full Message â†’</a>
                             </div>
                         </div>
                     <% } else {%>
@@ -193,10 +223,10 @@
                             <div class="announcement-content">
                                 <h3>Welcome to Excellence in Education</h3>
                                 <div class="article-meta">
-                                    <span>by Proprietor</span> • <span>January 15, 2025</span>
+                                    <span>by Proprietor</span> â€¢ <span>January 15, 2025</span>
                                 </div>
                                 <p>At Rutero Model School, we are committed to providing world-class education that nurtures young minds and prepares them for future success. Our dedication to academic excellence remains unwavering.</p>
-                                <a href="#" class="read-more">Read Full Message →</a>
+                                <a href="#" class="read-more">Read Full Message â†’</a>
                             </div>
                         </div>
                     <% } %>
